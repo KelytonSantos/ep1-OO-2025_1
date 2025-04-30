@@ -1,5 +1,6 @@
 package repositories;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,15 +19,23 @@ public class TurmaRepository {
     private ProfessorRepository professorRepository = new ProfessorRepository();
 
     public void save(Turma turma) {
+
+        File diretorio = new File("csv_files");
+        if (!diretorio.exists()) {
+            diretorio.mkdir();
+        }
+
         try {
             FileWriter arquivo = new FileWriter("csv_files/Turma.csv", true);
+
+            // tratar aqui caso ja tenha uma turma com o mesmo horario
 
             arquivo.write(turma.toString());
             arquivo.write("\n");
             arquivo.close();
 
         } catch (IOException error) {
-            System.out.println("Erro ao tentar salvar " + error.getMessage());
+            System.out.println("Erro ao salvar " + error.getMessage());
         }
     }
 

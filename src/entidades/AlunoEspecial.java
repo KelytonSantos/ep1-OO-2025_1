@@ -20,4 +20,8 @@ public class AlunoEspecial extends Aluno {
     public void setAlunoEspecial(Boolean alunoEspecial) {
         this.alunoEspecial = alunoEspecial;
     }
+
+    public String toString() {
+        return super.toString() + "," + getAlunoEspecial();
+    }
 }

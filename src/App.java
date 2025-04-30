@@ -2,6 +2,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import entidades.Aluno;
+import entidades.AlunoEspecial;
 import repositories.AlunoRepository;
 import repositories.ProfessorRepository;
 import repositories.TurmaRepository;

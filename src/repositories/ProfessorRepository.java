@@ -99,7 +99,7 @@ public class ProfessorRepository {
             }
 
         } catch (IOException error) {
-            System.out.println("Erro ao tentar buscar professores" + error.getMessage());
+            System.out.println("Erro ao consultar buscar professores" + error.getMessage());
         }
 
         return professores;
