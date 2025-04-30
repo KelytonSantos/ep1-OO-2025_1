@@ -39,6 +39,38 @@ public class AlunoEspecialRepository {
         }
     }
 
+    public void update(AlunoEspecial alunoEspecial) {
+
+        File arquivoOriginal = new File("csv_files/AlunoEspecial.csv");
+        File arquivoTemporario = new File("csv_files/AlunoEspecial_temp.csv");
+
+        try (Scanner sc = new Scanner(new FileReader(arquivoOriginal));
+                FileWriter arquivoDeEscrita = new FileWriter(arquivoTemporario)) {
+
+            while (sc.hasNextLine()) {
+
+                String linha = sc.nextLine();
+                String[] colunas = linha.split(",");
+
+                if (colunas.length > 0 && Integer.toString(alunoEspecial.getMatricula()).equals(colunas[0])) {
+                    arquivoDeEscrita.write(alunoEspecial.toString());
+                } else {
+                    arquivoDeEscrita.write(linha);
+                }
+                arquivoDeEscrita.write("\n");
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erro ao atualizar aluno: " + e.getMessage());
+        }
+
+        if (arquivoOriginal.delete()) {
+            arquivoTemporario.renameTo(arquivoOriginal);
+        } else {
+            System.out.println("Erro ao substituir o arquivo original.");
+        }
+    }
+
     public AlunoEspecial getAlunoEspecialByMatricula(Integer matricula) {
 
         try (Scanner sc = new Scanner(new FileReader("csv_files/AlunoEspecial.csv"))) {

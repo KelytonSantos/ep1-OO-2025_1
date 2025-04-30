@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 import entidades.Aluno;
 import entidades.AlunoEspecial;
+import repositories.AlunoEspecialRepository;
 import repositories.AlunoRepository;
 import repositories.ProfessorRepository;
 import repositories.TurmaRepository;
@@ -10,6 +11,7 @@ import repositories.TurmaRepository;
 public class App {
     public static Scanner sc = new Scanner(System.in);
     public static AlunoRepository alunoRepository = new AlunoRepository();
+    public static AlunoEspecialRepository alunoEspecialRepository = new AlunoEspecialRepository();
     public static ProfessorRepository professorRepository = new ProfessorRepository();
     public static TurmaRepository turmaRepository = new TurmaRepository();
 
@@ -118,7 +120,15 @@ public class App {
             System.out.println("Digite a matrícula do novo aluno especial: ");
             int matricula = sc.nextInt();
 
-            AlunoEspecial novoAlunoEspecial = new AlunoEspecial();
+            sc.nextLine();
+            System.out.println("Digite o nome do aluno: ");
+            String nome = sc.nextLine();
+
+            System.out.println("Digite o nome do curso: ");
+            String curso = sc.nextLine();
+
+            AlunoEspecial alunoEspecial = new AlunoEspecial(nome, matricula, curso, false, true);
+            alunoEspecialRepository.save(alunoEspecial);
 
         } else {
 
@@ -137,4 +147,68 @@ public class App {
         }
     }
 
+    public static void editarAluno() {
+
+        Aluno alunoParaEditar = new Aluno();
+
+        System.out.println("Voce deseja editar um aluno especial? (s para sim, qualquer outra tecla para n)");
+        char escolha = sc.next().charAt(0);
+
+        if (escolha == 's' || escolha == 'S') {
+
+            System.out.println("Digite a matricula do aluno: ");
+            int matricula = sc.nextInt();
+
+            AlunoEspecial alunoEspecialParaEditar = alunoEspecialRepository.getAlunoEspecialByMatricula(matricula);
+
+            if (alunoEspecialParaEditar.getMatricula() != null
+                    && alunoEspecialParaEditar.getMatricula().equals(matricula)) {
+
+                System.out.println("Voce deseja trancar o curso? (s para sim, qualquer tecla para não)");
+                escolha = sc.next().charAt(0);
+                if (escolha == 'S' || escolha == 's') {
+                    alunoEspecialParaEditar.setTrancamentoDeCurso(true);
+                } else {
+
+                    System.out.println("Digite o novo nome: ");
+                    String nome = sc.nextLine();
+
+                    System.out.println("Digite o novo curso: ");
+                    String curso = sc.nextLine();
+
+                    alunoEspecialParaEditar.setNome(nome);
+                    alunoEspecialParaEditar.setCurso(curso);
+                    alunoEspecialRepository.update(alunoEspecialParaEditar);
+                }
+
+            }
+        } else {
+            System.out.println("Digite a matricula do aluno: ");
+            int matricula = sc.nextInt();
+
+            sc.nextLine();
+
+            if ((alunoParaEditar = alunoRepository.getAlunoByMatricula(matricula)) != null) {
+                System.out.println("Deseja trocar de curso ou trancar (digite 1 para trocar ou 2 para trancar): ");
+                int escolha1 = sc.nextInt();
+
+                sc.nextLine();
+
+                if (escolha1 == 1) {
+                    System.out.println("Digite o novo curso: ");
+                    String curso = sc.nextLine();
+                    alunoParaEditar.setCurso(curso);
+                } else if (escolha == 2) {
+
+                    System.out.println("Voce quer trancar o curso? (s ou qualquer tecla para n)");
+                    char c = sc.next().charAt(0);
+
+                    if (c == 's' || c == 'S') {
+                        alunoParaEditar.setTrancamentoDeCurso(Boolean.valueOf(true));
+                        System.out.println("Voce trancou o curso!");
+                    }
+                }
+            }
+        }
+    }
 }
