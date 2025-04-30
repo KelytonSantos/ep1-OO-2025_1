@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import entidades.Professor;
@@ -47,10 +49,60 @@ public class ProfessorRepository {
             }
 
         } catch (IOException erro) {
-            System.out.println("Erro ao consultra professor " + erro.getMessage());
+            System.out.println("Erro ao consultar professor " + erro.getMessage());
         }
 
         return null;
+    }
+
+    public Professor getProfessorByNome(String nome) {
+
+        try (Scanner sc = new Scanner(new FileReader("csv_files/Professor.csv"))) {
+
+            while (sc.hasNextLine()) {
+
+                String linha = sc.nextLine();
+                String[] colunas = linha.split(",");
+
+                if (nome.equals(colunas[1])) {
+
+                    Integer matricula = Integer.parseInt(colunas[0]);
+                    Professor professor = new Professor(matricula, nome);
+
+                    return professor;
+                }
+
+            }
+
+        } catch (IOException erro) {
+            System.out.println("Erro ao consultar professor " + erro.getMessage());
+        }
+
+        return null;
+    }
+
+    public List<Professor> getProfessores() {
+        List<Professor> professores = new ArrayList<>();
+
+        try (Scanner sc = new Scanner(new FileReader("csv_files/Professor.csv"))) {
+
+            while (sc.hasNextLine()) {
+
+                String linha = sc.nextLine();
+
+                String[] colunas = linha.split(",");
+                Integer matricula = Integer.parseInt(colunas[0]);
+                String nome = colunas[1];
+
+                Professor novoProfessor = new Professor(matricula, nome);
+                professores.add(novoProfessor);
+            }
+
+        } catch (IOException error) {
+            System.out.println("Erro ao tentar buscar professores" + error.getMessage());
+        }
+
+        return professores;
     }
 
 }
