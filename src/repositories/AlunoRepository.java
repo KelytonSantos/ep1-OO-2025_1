@@ -39,10 +39,10 @@ public class AlunoRepository {
 
     public Aluno getAlunoByMatricula(Integer matricula) {
 
-        try (Scanner leitor = new Scanner(new FileReader("csv_files/Alunos.csv"))) {
+        try (Scanner sc = new Scanner(new FileReader("csv_files/Alunos.csv"))) {
 
-            while (leitor.hasNextLine()) {
-                String linha = leitor.nextLine();
+            while (sc.hasNextLine()) {
+                String linha = sc.nextLine();
 
                 String[] colunas = linha.split(",");
 
@@ -85,6 +85,5 @@ public class AlunoRepository {
             System.out.println("Erro ao buscar lista de alunos " + erro.getMessage());
         }
         return alunos;
-
     }
 }

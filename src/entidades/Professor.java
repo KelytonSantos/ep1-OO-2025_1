@@ -9,7 +9,7 @@ public class Professor {
         this.matricula = 0;
     }
 
-    public Professor(String nome, Integer matricula) {
+    public Professor(Integer matricula, String nome) {
         this.nome = nome;
         this.matricula = matricula;
     }
