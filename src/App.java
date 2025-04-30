@@ -1,5 +1,10 @@
+import repositories.AlunoRepository;
+
 public class App {
     public static void main(String[] args) throws Exception {
         System.out.println("Hello, World!");
+        AlunoRepository alunoRepository = new AlunoRepository();
+
+        alunoRepository.save();
     }
 }
