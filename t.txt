@@ -1,0 +1,3 @@
+javac -d out @sources.txt //to compile
+
+java -cp out App //to run

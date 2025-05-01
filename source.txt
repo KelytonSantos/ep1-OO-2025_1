@@ -1,0 +1,15 @@
+src/App.java
+src/entidades/Aluno.java
+src/entidades/AlunoEspecial.java
+src/entidades/Disciplina.java
+src/entidades/HorarioDeAula.java
+src/entidades/Professor.java
+src/entidades/Turma.java
+
+src/entidades/ENUM/MetodoDeAvaliacao.java
+src/entidades/ENUM/Modalidade.java
+
+src/repositories/AlunoRepository.java
+src/repositories/AlunoEspecialRepository.java
+src/repositories/ProfessorRepository.java
+src/repositories/TurmaRepository.java

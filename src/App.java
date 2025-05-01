@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 import entidades.Aluno;
 import entidades.AlunoEspecial;
+import entidades.Professor;
 import repositories.AlunoEspecialRepository;
 import repositories.AlunoRepository;
 import repositories.ProfessorRepository;
@@ -159,7 +160,11 @@ public class App {
 
             AlunoEspecial alunoEspecialParaEditar = alunoEspecialRepository.getAlunoEspecialByMatricula(matricula);
 
-            if (alunoEspecialParaEditar.getMatricula() != null
+            if (alunoEspecialParaEditar.getMatricula() == null) {
+
+                System.out.println("Aluno não encontrado");
+
+            } else if (alunoEspecialParaEditar.getMatricula() != null
                     && alunoEspecialParaEditar.getMatricula().equals(matricula)) {
 
                 System.out.println("Voce deseja trancar o curso? (s para sim, qualquer tecla para não)");
@@ -179,9 +184,6 @@ public class App {
                     alunoEspecialParaEditar.setCurso(curso);
                     alunoEspecialRepository.update(alunoEspecialParaEditar);
                 }
-
-            } else if (alunoEspecialParaEditar.getMatricula() == null) {
-                System.out.println("Aluno não encontrado");
             }
         } else {
 
@@ -213,6 +215,28 @@ public class App {
                     }
                 }
             }
+
+            alunoRepository.update(alunoParaEditar);
+        }
+    }
+
+    public static void criarProfessor() {
+
+        System.out.println("Digite a matricula do novo professor: ");
+        int matricula = sc.nextInt();
+
+        if (professorRepository.getProfessorByMatricula(matricula) != null) {
+            System.out.println("Professor ja existe");
+
+        } else {
+            sc.nextLine();
+
+            System.out.println("Digite o nome do professor: ");
+            String nomeProfessor = sc.nextLine();
+
+            Professor novoProfessor = new Professor(matricula, nomeProfessor);
+
+            professorRepository.save(novoProfessor);
         }
     }
 }
