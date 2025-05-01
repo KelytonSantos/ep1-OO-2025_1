@@ -1,8 +1,10 @@
 package repositories;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
 import entidades.Disciplina;
 
@@ -26,6 +28,29 @@ public class DisciplinaRepository {
         } catch (IOException erro) {
             System.out.println("Erro ao salvar " + erro.getMessage());
         }
+    }
+
+    public Disciplina getByNome(String nome) {
+
+        try (Scanner sc = new Scanner(new FileReader("csv_files/Disciplina.csv"))) {
+
+            while (sc.hasNextLine()) {
+
+                String linha = sc.nextLine();
+                String[] colunas = linha.split(",");
+
+                if (nome.equals(colunas[0])) {
+                    Disciplina disciplina = new Disciplina(nome, Integer.parseInt(colunas[1]));
+                    return disciplina;
+                }
+
+            }
+
+        } catch (IOException erro) {
+            System.out.println("Erro ao buscar por nome " + erro.getMessage());
+        }
+
+        return null;
     }
 
 }

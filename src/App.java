@@ -3,7 +3,11 @@ import java.util.Scanner;
 import entidades.Aluno;
 import entidades.AlunoEspecial;
 import entidades.Disciplina;
+import entidades.HorarioDeAula;
 import entidades.Professor;
+import entidades.Turma;
+import entidades.ENUM.MetodoDeAvaliacao;
+import entidades.ENUM.Modalidade;
 import repositories.AlunoEspecialRepository;
 import repositories.AlunoRepository;
 import repositories.DisciplinaRepository;
@@ -80,6 +84,7 @@ public class App {
                         criarDisciplina();
                         break;
                     case 3:
+                        criarTurma();
                         break;
                     case 4:
 
@@ -253,5 +258,67 @@ public class App {
 
         Disciplina novaDisciplina = new Disciplina(nomeDisciplina, cargaHoraria);
         disciplinaRepository.save(novaDisciplina);
+    }
+
+    public static void criarTurma() {
+
+        System.out.println("Digite o nome da disciplina existente que a nova turma estara associada: ");
+        String nomeDisciplina = sc.nextLine();
+
+        Disciplina disciplina = disciplinaRepository.getByNome(nomeDisciplina);
+
+        if (disciplina.getNome().equals(null)) {
+            System.out.println("Disciplina inexistente, crie uma primeiro!");
+        } else {
+
+            Professor novoProfessor = new Professor();
+
+            System.out.println("Digite a matricula do professor que dara a materia: ");
+            int matriculaProfessor = sc.nextInt();
+
+            if (professorRepository.getProfessorByMatricula(matriculaProfessor).equals(null)) {
+                System.out.println("Professor não existente, cadastre primeiro um professor!");
+            } else {
+
+                novoProfessor = professorRepository.getProfessorByMatricula(matriculaProfessor);
+
+                System.out.println("Digite o semestre em que a matéria esta dísponivel: ");
+                int semestre = sc.nextInt();
+
+                sc.nextLine();
+
+                System.out.println("Digite o metodo de avaliação do professor(MEDIA PONDERADA ou MEDIA SIMPLES): ");
+                String metodoDeAval = sc.nextLine();
+
+                System.out.println("Digite o modo de participação na materia (1 para online ou 2 para presencial): ");
+                int modoDePartici = sc.nextInt();
+
+                System.out.println(
+                        "Defina o dia da semana, o horario e os minutos em que serão ministradas as aulas (ex: Quinta, 14, 00)");
+                String diaDaSemana = sc.next();
+                int hora = sc.nextInt();
+                sc.nextLine();
+                int minutos = sc.nextInt();
+
+                System.out.println("Defina a capacidade maxima de alunos: ");
+                int capacidadeMax = sc.nextInt();
+
+                HorarioDeAula horarioDeAula = new HorarioDeAula(diaDaSemana, hora, minutos);
+
+                Turma novaTurma = new Turma(novoProfessor, semestre, MetodoDeAvaliacao.fromCode(metodoDeAval),
+                        Modalidade.valueOf(modoDePartici), horarioDeAula, capacidadeMax);
+
+                sc.nextLine();
+                if (modoDePartici == 2) {
+                    System.out.println("Digite a sala (ex: S9): ");
+                    String sala = sc.nextLine();
+                    novaTurma.setSala(sala);
+                }
+
+                System.out.println(novoProfessor.getNome());
+
+                turmaRepository.save(novaTurma);
+            }
+        }
     }
 }

@@ -42,4 +42,9 @@ public class Disciplina {
     public void setTurma(Turma turma) {
         this.turma.add(turma);
     }
+
+    @Override
+    public String toString() {
+        return getNome() + "," + getCargaHoraria();
+    }
 }
