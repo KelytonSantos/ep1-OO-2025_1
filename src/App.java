@@ -41,7 +41,7 @@ public class App {
                             matricularAluno();
 
                         else if (escolha == 2) {
-
+                            editarAluno();
                         } else {
                             System.out.println("Numero invalido!");
                         }
@@ -149,8 +149,6 @@ public class App {
 
     public static void editarAluno() {
 
-        Aluno alunoParaEditar = new Aluno();
-
         System.out.println("Voce deseja editar um aluno especial? (s para sim, qualquer outra tecla para n)");
         char escolha = sc.next().charAt(0);
 
@@ -166,6 +164,7 @@ public class App {
 
                 System.out.println("Voce deseja trancar o curso? (s para sim, qualquer tecla para não)");
                 escolha = sc.next().charAt(0);
+                sc.nextLine();
                 if (escolha == 'S' || escolha == 's') {
                     alunoEspecialParaEditar.setTrancamentoDeCurso(true);
                 } else {
@@ -181,8 +180,13 @@ public class App {
                     alunoEspecialRepository.update(alunoEspecialParaEditar);
                 }
 
+            } else if (alunoEspecialParaEditar.getMatricula() == null) {
+                System.out.println("Aluno não encontrado");
             }
         } else {
+
+            Aluno alunoParaEditar = new Aluno();
+
             System.out.println("Digite a matricula do aluno: ");
             int matricula = sc.nextInt();
 

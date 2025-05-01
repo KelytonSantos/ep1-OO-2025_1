@@ -37,9 +37,40 @@ public class AlunoRepository {
         }
     }
 
+    public void update(Aluno aluno) {
+        File arquivoOriginal = new File("csv_files/Aluno.csv");
+        File arquivoTemporario = new File("csv_files/Aluno_temp.csv");
+
+        try (Scanner sc = new Scanner(new FileReader(arquivoOriginal));
+                FileWriter arquivoDeEscrita = new FileWriter(arquivoTemporario)) {
+
+            while (sc.hasNextLine()) {
+
+                String linha = sc.nextLine();
+                String[] colunas = linha.split(",");
+
+                if (colunas.length > 0 && Integer.toString(aluno.getMatricula()).equals(colunas[0])) {
+                    arquivoDeEscrita.write(aluno.toString());
+                } else {
+                    arquivoDeEscrita.write(linha);
+                }
+                arquivoDeEscrita.write("\n");
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erro ao atualizar aluno: " + e.getMessage());
+        }
+
+        if (arquivoOriginal.delete()) {
+            arquivoTemporario.renameTo(arquivoOriginal);
+        } else {
+            System.out.println("Erro ao substituir o arquivo original.");
+        }
+    }
+
     public Aluno getAlunoByMatricula(Integer matricula) {
 
-        try (Scanner sc = new Scanner(new FileReader("csv_files/Alunos.csv"))) {
+        try (Scanner sc = new Scanner(new FileReader("csv_files/Aluno.csv"))) {
 
             while (sc.hasNextLine()) {
                 String linha = sc.nextLine();
