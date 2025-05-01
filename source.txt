@@ -13,3 +13,4 @@ src/repositories/AlunoRepository.java
 src/repositories/AlunoEspecialRepository.java
 src/repositories/ProfessorRepository.java
 src/repositories/TurmaRepository.java
+src/repositories/DisciplinaRepository.java

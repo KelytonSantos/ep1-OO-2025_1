@@ -1,11 +1,12 @@
-import java.util.List;
 import java.util.Scanner;
 
 import entidades.Aluno;
 import entidades.AlunoEspecial;
+import entidades.Disciplina;
 import entidades.Professor;
 import repositories.AlunoEspecialRepository;
 import repositories.AlunoRepository;
+import repositories.DisciplinaRepository;
 import repositories.ProfessorRepository;
 import repositories.TurmaRepository;
 
@@ -14,6 +15,7 @@ public class App {
     public static AlunoRepository alunoRepository = new AlunoRepository();
     public static AlunoEspecialRepository alunoEspecialRepository = new AlunoEspecialRepository();
     public static ProfessorRepository professorRepository = new ProfessorRepository();
+    public static DisciplinaRepository disciplinaRepository = new DisciplinaRepository();
     public static TurmaRepository turmaRepository = new TurmaRepository();
 
     public static void main(String[] args) throws Exception {
@@ -72,9 +74,10 @@ public class App {
 
                 switch (escolha) {
                     case 1:
+                        criarProfessor();
                         break;
                     case 2:
-
+                        criarDisciplina();
                         break;
                     case 3:
                         break;
@@ -238,5 +241,17 @@ public class App {
 
             professorRepository.save(novoProfessor);
         }
+    }
+
+    public static void criarDisciplina() {
+
+        System.out.println("Digite o nome da nova disciplina: ");
+        String nomeDisciplina = sc.nextLine();
+
+        System.out.println("Digite a carga horaria: ");
+        int cargaHoraria = sc.nextInt();
+
+        Disciplina novaDisciplina = new Disciplina(nomeDisciplina, cargaHoraria);
+        disciplinaRepository.save(novaDisciplina);
     }
 }
