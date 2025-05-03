@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import entidades.AlunoEspecial;
@@ -97,5 +99,28 @@ public class AlunoEspecialRepository {
         }
 
         return null;
+    }
+
+    public List<AlunoEspecial> getAlunos() {
+        List<AlunoEspecial> alunos = new ArrayList<>();
+
+        try (Scanner sc = new Scanner(new FileReader("csv_files/AlunoEspecial.csv"))) {
+            while (sc.hasNextLine()) {
+                String linha = sc.nextLine();
+
+                String[] colunas = linha.split(",");
+                Integer matricula = Integer.parseInt(colunas[0]);
+                String nome = colunas[1];
+                String curso = colunas[2];
+                Boolean trancamento = Boolean.parseBoolean(colunas[3]);
+
+                AlunoEspecial novoAluno = new AlunoEspecial(nome, matricula, curso, trancamento, true);
+                alunos.add(novoAluno);
+            }
+
+        } catch (IOException erro) {
+            System.out.println("Erro ao buscar lista de alunos " + erro.getMessage());
+        }
+        return alunos;
     }
 }

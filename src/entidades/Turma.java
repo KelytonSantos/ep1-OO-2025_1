@@ -14,6 +14,7 @@ public class Turma {
     private HorarioDeAula horarioDeAula;
     private String sala;
     private Integer maxAlunos;
+    private Disciplina disciplina;
     private Set<Aluno> alunos = new HashSet<>();// escrever metodos
 
     public Turma() {
@@ -87,6 +88,14 @@ public class Turma {
 
     public void setMaxAlunos(Integer maxAlunos) {
         this.maxAlunos = maxAlunos;
+    }
+
+    public Disciplina getDisciplina() {
+        return disciplina;
+    }
+
+    public void setDisciplina(Disciplina disciplina) {
+        this.disciplina = disciplina;
     }
 
     public void setAluno(Aluno aluno) {

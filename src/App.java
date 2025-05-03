@@ -57,12 +57,14 @@ public class App {
 
                         break;
                     case 3:
-                        for (Aluno aluno : alunoRepository.getAlunos()) {
-                            System.out.println("Matricula: " + aluno.getMatricula() + " Nome: " + aluno.getNome()
-                                    + " Curso: " + aluno.getCurso());
-                        }
+
+                        System.out.println(
+                                "Você deseja ver: 1 todos os alunos(normal/especial); 2 apenas alunos normais; 3 alunos especiais");
+                        escolha = sc.nextInt();
+                        listarAlunos(escolha);
                         break;
                     default:
+                        System.out.println("Código Inválido");
                         break;
                 }
                 break;
@@ -115,6 +117,7 @@ public class App {
                 break;
 
             default:
+                System.out.println("Código inválido");
                 break;
         }
 
@@ -250,6 +253,8 @@ public class App {
 
     public static void criarDisciplina() {
 
+        sc.nextLine();
+
         System.out.println("Digite o nome da nova disciplina: ");
         String nomeDisciplina = sc.nextLine();
 
@@ -261,6 +266,8 @@ public class App {
     }
 
     public static void criarTurma() {
+
+        sc.nextLine();
 
         System.out.println("Digite o nome da disciplina existente que a nova turma estara associada: ");
         String nomeDisciplina = sc.nextLine();
@@ -277,7 +284,7 @@ public class App {
             int matriculaProfessor = sc.nextInt();
 
             if (professorRepository.getProfessorByMatricula(matriculaProfessor).equals(null)) {
-                System.out.println("Professor não existente, cadastre primeiro um professor!");
+                System.out.println("Professor inexistente, cadastre primeiro um professor!");
             } else {
 
                 novoProfessor = professorRepository.getProfessorByMatricula(matriculaProfessor);
@@ -315,10 +322,46 @@ public class App {
                     novaTurma.setSala(sala);
                 }
 
-                System.out.println(novoProfessor.getNome());
-
                 turmaRepository.save(novaTurma);
             }
         }
     }
+
+    public static void listarAlunos(int numero) {
+        switch (numero) {
+            case 1:
+
+                System.out.println("Lista de Alunos");
+                for (Aluno aluno : alunoRepository.getAlunos()) {
+                    System.out.println("Matricula: " + aluno.getMatricula() + " Nome: " + aluno.getNome()
+                            + " Curso: " + aluno.getCurso());
+                }
+
+                System.out.println("");
+
+                System.out.println("Lista de Alunos Especiais");
+                for (AlunoEspecial aluno : alunoEspecialRepository.getAlunos()) {
+                    System.out.println("Matricula: " + aluno.getMatricula() + " Nome: " + aluno.getNome()
+                            + " Curso: " + aluno.getCurso());
+                }
+
+                break;
+            case 2:
+                for (Aluno aluno : alunoRepository.getAlunos()) {
+                    System.out.println("Matricula: " + aluno.getMatricula() + " Nome: " + aluno.getNome()
+                            + " Curso: " + aluno.getCurso());
+                }
+                break;
+            case 3:
+                for (AlunoEspecial aluno : alunoEspecialRepository.getAlunos()) {
+                    System.out.println("Matricula: " + aluno.getMatricula() + " Nome: " + aluno.getNome()
+                            + " Curso: " + aluno.getCurso());
+                }
+                break;
+            default:
+                System.out.println("Código inválido");
+                break;
+        }
+    }
 }
+// se o nome for diferente da ruim(tratar)
