@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import entidades.Disciplina;
+import entidades.Turma;
 
 public class DisciplinaRepository {
 
@@ -27,6 +28,45 @@ public class DisciplinaRepository {
 
         } catch (IOException erro) {
             System.out.println("Erro ao salvar " + erro.getMessage());
+        }
+    }
+
+    public void update(Disciplina disciplina) {
+        File arquivoOriginal = new File("csv_files/Disciplina.csv");
+        File arquivoTemporario = new File("csv_files/Disciplina_temp.csv");
+
+        try (Scanner sc = new Scanner(new FileReader(arquivoOriginal));
+                FileWriter writer = new FileWriter(arquivoTemporario)) {
+
+            while (sc.hasNextLine()) {
+                String linha = sc.nextLine();
+                String[] colunas = linha.split(",");
+
+                if (colunas.length > 0 && disciplina.getNome().equals(colunas[0])) {
+
+                    StringBuilder novaLinha = new StringBuilder();
+                    novaLinha.append(disciplina.getNome()).append(",");
+                    novaLinha.append(disciplina.getCargaHoraria());
+
+                    for (Turma turma : disciplina.getTurmas()) {
+                        novaLinha.append(",").append(turma.getNumeroTurma());
+                    }
+
+                    writer.write(novaLinha.toString());
+                } else {
+                    writer.write(linha);
+                }
+                writer.write("\n");
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erro ao atualizar disciplina: " + e.getMessage());
+        }
+
+        if (arquivoOriginal.delete()) {
+            arquivoTemporario.renameTo(arquivoOriginal);
+        } else {
+            System.out.println("Erro ao substituir o arquivo original.");
         }
     }
 

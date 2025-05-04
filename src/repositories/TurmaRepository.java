@@ -39,6 +39,51 @@ public class TurmaRepository {
         }
     }
 
+    public Turma getTurmaByNum(Integer num) {
+
+        try (Scanner leitor = new Scanner(new FileReader("csv_files/Turmas.csv"))) {
+
+            while (leitor.hasNextLine()) {
+                Professor professor = new Professor();
+                HorarioDeAula horarioDeAula = new HorarioDeAula();
+
+                String linha = leitor.nextLine();
+
+                String[] colunas = linha.split(",");
+                String nomeProfessor = colunas[1];
+
+                professor = professorRepository.getProfessorByNome(nomeProfessor);
+
+                if (professor != null && nomeProfessor.equals(professor.getNome())) {
+                    Integer numTurma = Integer.parseInt(colunas[0]);
+                    Integer semestre = Integer.parseInt(colunas[2]);
+                    Modalidade modalidade = Modalidade.valueOf(colunas[3]);
+                    MetodoDeAvaliacao metodoDeAvaliacao = MetodoDeAvaliacao.valueOf(colunas[4]);
+                    String dia = colunas[5];
+                    Integer hora = Integer.parseInt(colunas[6]);
+                    Integer min = Integer.parseInt(colunas[7]);
+                    String sala = colunas[8];
+                    Integer capacidade = Integer.parseInt(colunas[9]);
+
+                    horarioDeAula.setDia(dia);
+                    horarioDeAula.setHora(hora);
+                    horarioDeAula.setMinuto(min);
+
+                    Turma turma = new Turma(numTurma, professor, semestre, metodoDeAvaliacao, modalidade, horarioDeAula,
+                            capacidade);
+                    turma.setSala(sala);
+
+                    return turma;
+                }
+            }
+
+        } catch (IOException error) {
+            System.out.println("Erro ao tentar buscar alunos" + error.getMessage());
+        }
+        return null;
+
+    }
+
     public List<Turma> getTurmas() {
         List<Turma> turmas = new ArrayList<>();
 
@@ -51,25 +96,26 @@ public class TurmaRepository {
                 String linha = leitor.nextLine();
 
                 String[] colunas = linha.split(",");
-                String nomeProfessor = colunas[0];
+                String nomeProfessor = colunas[1];
 
                 professor = professorRepository.getProfessorByNome(nomeProfessor);
 
                 if (professor != null && nomeProfessor.equals(professor.getNome())) {
-                    Integer semestre = Integer.parseInt(colunas[1]);
-                    Modalidade modalidade = Modalidade.valueOf(colunas[2]);
-                    MetodoDeAvaliacao metodoDeAvaliacao = MetodoDeAvaliacao.valueOf(colunas[3]);
-                    String dia = colunas[4];
-                    Integer hora = Integer.parseInt(colunas[5]);
-                    Integer min = Integer.parseInt(colunas[6]);
-                    String sala = colunas[7];
-                    Integer capacidade = Integer.parseInt(colunas[8]);
+                    Integer numTurma = Integer.parseInt(colunas[0]);
+                    Integer semestre = Integer.parseInt(colunas[2]);
+                    Modalidade modalidade = Modalidade.valueOf(colunas[3]);
+                    MetodoDeAvaliacao metodoDeAvaliacao = MetodoDeAvaliacao.valueOf(colunas[4]);
+                    String dia = colunas[5];
+                    Integer hora = Integer.parseInt(colunas[6]);
+                    Integer min = Integer.parseInt(colunas[7]);
+                    String sala = colunas[8];
+                    Integer capacidade = Integer.parseInt(colunas[9]);
 
                     horarioDeAula.setDia(dia);
                     horarioDeAula.setHora(hora);
                     horarioDeAula.setMinuto(min);
 
-                    Turma turma = new Turma(professor, semestre, metodoDeAvaliacao, modalidade, horarioDeAula,
+                    Turma turma = new Turma(numTurma, professor, semestre, metodoDeAvaliacao, modalidade, horarioDeAula,
                             capacidade);
                     turma.setSala(sala);
 

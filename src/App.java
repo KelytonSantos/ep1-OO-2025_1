@@ -262,7 +262,10 @@ public class App {
         int cargaHoraria = sc.nextInt();
 
         Disciplina novaDisciplina = new Disciplina(nomeDisciplina, cargaHoraria);
+
+        System.out.println("Turma não encontrada, cadastre uma turma primeiro!");
         disciplinaRepository.save(novaDisciplina);
+
     }
 
     public static void criarTurma() {
@@ -274,18 +277,21 @@ public class App {
 
         Disciplina disciplina = disciplinaRepository.getByNome(nomeDisciplina);
 
-        if (disciplina.getNome().equals(null)) {
+        if (disciplina == null) {
             System.out.println("Disciplina inexistente, crie uma primeiro!");
         } else {
-
-            Professor novoProfessor = new Professor();
 
             System.out.println("Digite a matricula do professor que dara a materia: ");
             int matriculaProfessor = sc.nextInt();
 
-            if (professorRepository.getProfessorByMatricula(matriculaProfessor).equals(null)) {
+            Professor novoProfessor = professorRepository.getProfessorByMatricula(matriculaProfessor);
+
+            if (novoProfessor == null) {
                 System.out.println("Professor inexistente, cadastre primeiro um professor!");
             } else {
+
+                System.out.println("Digite o número da turma (ex: 05): ");
+                int numTurma = sc.nextInt();
 
                 novoProfessor = professorRepository.getProfessorByMatricula(matriculaProfessor);
 
@@ -312,8 +318,11 @@ public class App {
 
                 HorarioDeAula horarioDeAula = new HorarioDeAula(diaDaSemana, hora, minutos);
 
-                Turma novaTurma = new Turma(novoProfessor, semestre, MetodoDeAvaliacao.fromCode(metodoDeAval),
+                Turma novaTurma = new Turma(numTurma, novoProfessor, semestre, MetodoDeAvaliacao.fromCode(metodoDeAval),
                         Modalidade.valueOf(modoDePartici), horarioDeAula, capacidadeMax);
+
+                novaTurma.setDisciplina(disciplina);
+                disciplina.addTurma(novaTurma);
 
                 sc.nextLine();
                 if (modoDePartici == 2) {
@@ -323,6 +332,7 @@ public class App {
                 }
 
                 turmaRepository.save(novaTurma);
+                disciplinaRepository.update(disciplina);
             }
         }
     }

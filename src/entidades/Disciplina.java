@@ -7,7 +7,7 @@ public class Disciplina {
 
     private String nome;
     private Integer cargaHoraria;
-    private List<Turma> turma = new ArrayList<>();
+    private List<Turma> turmas = new ArrayList<>();
 
     public Disciplina() {
         this.nome = "";
@@ -35,16 +35,24 @@ public class Disciplina {
         this.cargaHoraria = cargaHoraria;
     }
 
-    public List<Turma> getTurma() {
-        return turma;
+    public List<Turma> getTurmas() {
+        return turmas;
     }
 
-    public void setTurma(Turma turma) {
-        this.turma.add(turma);
+    public void addTurma(Turma turma) {
+        this.turmas.add(turma);
     }
 
     @Override
     public String toString() {
-        return getNome() + "," + getCargaHoraria();
+        StringBuilder sb = new StringBuilder();
+        sb.append(nome).append(",").append(cargaHoraria);
+
+        for (Turma turma : turmas) {
+            sb.append(",").append(turma.getNumeroTurma());
+        }
+
+        return sb.toString();
     }
+
 }

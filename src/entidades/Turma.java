@@ -7,6 +7,7 @@ import entidades.ENUM.MetodoDeAvaliacao;
 import entidades.ENUM.Modalidade;
 
 public class Turma {
+    private Integer numeroTurma;
     private Professor professor;
     private Integer semestre;
     private MetodoDeAvaliacao metodoDeAvaliacao;
@@ -20,8 +21,9 @@ public class Turma {
     public Turma() {
     }
 
-    public Turma(Professor professor, Integer semestre, MetodoDeAvaliacao metodoDeAvaliacao,
+    public Turma(Integer turma, Professor professor, Integer semestre, MetodoDeAvaliacao metodoDeAvaliacao,
             Modalidade modoDeParticipacao, HorarioDeAula horarioDeAula, Integer maxAlunos) {
+        this.numeroTurma = turma;
         this.professor = professor;
         this.semestre = semestre;
         this.metodoDeAvaliacao = metodoDeAvaliacao;
@@ -29,6 +31,14 @@ public class Turma {
         this.modoDeParticipacao = modoDeParticipacao;
         this.horarioDeAula = horarioDeAula;
         this.maxAlunos = maxAlunos;
+    }
+
+    public Integer getNumeroTurma() {
+        return numeroTurma;
+    }
+
+    public void setNumeroTurma(Integer numeroTurma) {
+        this.numeroTurma = numeroTurma;
     }
 
     public Professor getProfessor() {
@@ -108,9 +118,10 @@ public class Turma {
 
     @Override
     public String toString() {
-        return getProfessor().getNome() + "," + getSemestre() + "," + getModoDeParticipacao() + ","
+        return getNumeroTurma() + "," + getProfessor().getNome() + "," + getSemestre() + "," + getModoDeParticipacao()
+                + ","
                 + getMetodoDeAvaliacao() + ","
                 + getHorarioDeAula().toString()
-                + "," + getSala() + "," + getMaxAlunos();
+                + "," + getSala() + "," + getMaxAlunos() + "," + getDisciplina().getNome();
     }
 }
