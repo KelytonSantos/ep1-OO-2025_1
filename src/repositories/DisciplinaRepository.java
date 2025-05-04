@@ -94,3 +94,4 @@ public class DisciplinaRepository {
     }
 
 }
+// tratar caso ja tenha uma turma com o mesmo horario

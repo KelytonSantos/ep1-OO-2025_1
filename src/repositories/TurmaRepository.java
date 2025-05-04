@@ -28,14 +28,53 @@ public class TurmaRepository {
         try {
             FileWriter arquivo = new FileWriter("csv_files/Turma.csv", true);
 
-            // tratar aqui caso ja tenha uma turma com o mesmo horario
-
             arquivo.write(turma.toString());
             arquivo.write("\n");
             arquivo.close();
 
         } catch (IOException error) {
             System.out.println("Erro ao salvar " + error.getMessage());
+        }
+    }
+
+    public void update(Turma turma) {
+        File arquivoOriginal = new File("csv_files/Turma.csv");
+        File arquivoTemporario = new File("csv_files/Turma_temp.csv");
+
+        try (Scanner sc = new Scanner(new FileReader(arquivoOriginal));
+                FileWriter writer = new FileWriter(arquivoTemporario)) {
+
+            while (sc.hasNextLine()) {
+                String linha = sc.nextLine();
+                String[] colunas = linha.split(",");
+
+                if (colunas.length > 0 && turma.getNumeroTurma().equals(colunas[0])) {
+
+                    StringBuilder novaLinha = new StringBuilder();
+                    novaLinha.append(turma.getProfessor().getNome()).append(",");
+                    novaLinha.append(turma.getSemestre()).append(",");
+                    novaLinha.append(turma.getModoDeParticipacao()).append(",");
+                    novaLinha.append(turma.getMetodoDeAvaliacao()).append(",");
+                    novaLinha.append(turma.getHorarioDeAula().toString()).append(",");
+                    novaLinha.append(turma.getSala()).append(",");
+                    novaLinha.append(turma.getMaxAlunos()).append(",");
+                    novaLinha.append(turma.getDisciplina().getNome());
+
+                    writer.write(novaLinha.toString());
+                } else {
+                    writer.write(linha);
+                }
+                writer.write("\n");
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erro ao atualizar disciplina: " + e.getMessage());
+        }
+
+        if (arquivoOriginal.delete()) {
+            arquivoTemporario.renameTo(arquivoOriginal);
+        } else {
+            System.out.println("Erro ao substituir o arquivo original.");
         }
     }
 
