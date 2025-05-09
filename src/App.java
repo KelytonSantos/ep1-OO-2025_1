@@ -54,6 +54,7 @@ public class App {
                         }
                         break;
                     case 2: // fazer depois de criar func de matricular turma
+                        matricularAlunoDisciplina();
 
                         break;
                     case 3:
@@ -373,5 +374,31 @@ public class App {
                 break;
         }
     }
+
+    public static void matricularAlunoDisciplina() {
+
+        System.out.println("Digite a matricula do aluno: ");
+        int matricula = sc.nextInt();
+
+        Aluno aluno = alunoEspecialRepository.getAlunoEspecialByMatricula(matricula);
+        aluno = (aluno != null) ? aluno : alunoRepository.getAlunoByMatricula(matricula);
+
+        if (aluno == null) {
+            System.out.println("Aluno não encontrado");
+        } else {
+            System.out.println("Digite o numero da turma que deseja matricular o aluno " + aluno.getNome() + ":");
+            int turmaNum = sc.nextInt();
+            Turma turma = turmaRepository.getTurmaByNum(turmaNum);
+            System.out.println("disc: " + turma.getDisciplina().getNome());
+
+            if (turma != null) {
+                System.out.println("if...");
+                turma.setAluno(aluno);
+
+                turmaRepository.update(turma);
+            }
+        }
+    }
 }
+
 // se o nome for diferente da ruim(tratar)

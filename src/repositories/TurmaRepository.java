@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import entidades.Aluno;
 import entidades.HorarioDeAula;
 import entidades.Professor;
 import entidades.Turma;
@@ -48,7 +49,9 @@ public class TurmaRepository {
                 String linha = sc.nextLine();
                 String[] colunas = linha.split(",");
 
-                if (colunas.length > 0 && turma.getNumeroTurma().equals(colunas[0])) {
+                System.out.println("antes do if");
+                if (colunas.length > 0 && turma.getNumeroTurma() == Integer.parseInt(colunas[0])) {
+                    System.out.println("deopis do if");
 
                     StringBuilder novaLinha = new StringBuilder();
                     novaLinha.append(turma.getProfessor().getNome()).append(",");
@@ -58,7 +61,12 @@ public class TurmaRepository {
                     novaLinha.append(turma.getHorarioDeAula().toString()).append(",");
                     novaLinha.append(turma.getSala()).append(",");
                     novaLinha.append(turma.getMaxAlunos()).append(",");
-                    novaLinha.append(turma.getDisciplina().getNome());
+                    novaLinha.append(turma.getDisciplina().getNome()).append(",");
+
+                    for (Aluno aluno : turma.getAlunos()) {
+                        novaLinha.append(aluno.getNome()).append(",");
+                        System.out.println("aluno: " + aluno.getNome());
+                    }
 
                     writer.write(novaLinha.toString());
                 } else {
@@ -67,7 +75,9 @@ public class TurmaRepository {
                 writer.write("\n");
             }
 
-        } catch (IOException e) {
+        } catch (
+
+        IOException e) {
             System.out.println("Erro ao atualizar disciplina: " + e.getMessage());
         }
 
@@ -80,47 +90,64 @@ public class TurmaRepository {
 
     public Turma getTurmaByNum(Integer num) {
 
-        try (Scanner leitor = new Scanner(new FileReader("csv_files/Turmas.csv"))) {
+        try (Scanner leitor = new Scanner(new FileReader("csv_files/Turma.csv"))) {
 
             while (leitor.hasNextLine()) {
-                Professor professor = new Professor();
-                HorarioDeAula horarioDeAula = new HorarioDeAula();
-
                 String linha = leitor.nextLine();
 
+                // Ignora linhas em branco
+                if (linha.trim().isEmpty())
+                    continue;
+
                 String[] colunas = linha.split(",");
-                String nomeProfessor = colunas[1];
 
-                professor = professorRepository.getProfessorByNome(nomeProfessor);
+                // Verifica se a linha tem pelo menos 11 colunas (como no exemplo)
+                if (colunas.length < 11) {
+                    System.out.println("Linha inválida ou incompleta: " + linha);
+                    continue;
+                }
 
-                if (professor != null && nomeProfessor.equals(professor.getNome())) {
+                try {
+                    // Parse dos dados
                     Integer numTurma = Integer.parseInt(colunas[0]);
+                    String nomeProfessor = colunas[1];
                     Integer semestre = Integer.parseInt(colunas[2]);
                     Modalidade modalidade = Modalidade.valueOf(colunas[3]);
                     MetodoDeAvaliacao metodoDeAvaliacao = MetodoDeAvaliacao.valueOf(colunas[4]);
                     String dia = colunas[5];
                     Integer hora = Integer.parseInt(colunas[6]);
                     Integer min = Integer.parseInt(colunas[7]);
-                    String sala = colunas[8];
+                    String sala = colunas[8].equalsIgnoreCase("null") ? null : colunas[8];
                     Integer capacidade = Integer.parseInt(colunas[9]);
 
-                    horarioDeAula.setDia(dia);
-                    horarioDeAula.setHora(hora);
-                    horarioDeAula.setMinuto(min);
+                    if (numTurma.equals(num)) {
+                        Professor professor = professorRepository.getProfessorByNome(nomeProfessor);
 
-                    Turma turma = new Turma(numTurma, professor, semestre, metodoDeAvaliacao, modalidade, horarioDeAula,
-                            capacidade);
-                    turma.setSala(sala);
+                        if (professor != null && nomeProfessor.equals(professor.getNome())) {
+                            HorarioDeAula horarioDeAula = new HorarioDeAula();
+                            horarioDeAula.setDia(dia);
+                            horarioDeAula.setHora(hora);
+                            horarioDeAula.setMinuto(min);
 
-                    return turma;
+                            Turma turma = new Turma(numTurma, professor, semestre, metodoDeAvaliacao, modalidade,
+                                    horarioDeAula, capacidade);
+                            turma.setSala(sala);
+
+                            return turma;
+                        }
+                    }
+
+                } catch (Exception e) {
+                    System.out.println("Erro ao processar linha: " + linha);
+                    e.printStackTrace(); // Mostra onde falhou
                 }
             }
 
         } catch (IOException error) {
-            System.out.println("Erro ao tentar buscar alunos" + error.getMessage());
+            System.out.println("Erro ao tentar ler o arquivo Turma.csv: " + error.getMessage());
         }
-        return null;
 
+        return null;
     }
 
     public List<Turma> getTurmas() {
