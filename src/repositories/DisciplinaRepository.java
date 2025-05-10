@@ -20,7 +20,7 @@ public class DisciplinaRepository {
 
         try {
 
-            FileWriter arquivo = new FileWriter("csv_files/Disciplina.csv");
+            FileWriter arquivo = new FileWriter("csv_files/Disciplina.csv", true);
 
             arquivo.write(disciplina.toString());
             arquivo.write("\n");

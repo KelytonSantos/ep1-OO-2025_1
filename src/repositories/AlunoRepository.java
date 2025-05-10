@@ -95,6 +95,32 @@ public class AlunoRepository {
         return null;
     }
 
+    public Aluno getAlunoByNome(String nome) {
+
+        try (Scanner sc = new Scanner(new FileReader("csv_files/Aluno.csv"))) {
+
+            while (sc.hasNextLine()) {
+                String linha = sc.nextLine();
+
+                String[] colunas = linha.split(",");
+
+                if (nome.equals(colunas[1])) {
+                    String curso = colunas[2];
+                    Boolean trancamento = Boolean.parseBoolean(colunas[3]);
+
+                    Aluno aluno = new Aluno(nome, Integer.parseInt(colunas[0]), curso, trancamento);
+
+                    return aluno;
+                }
+
+            }
+        } catch (IOException error) {
+            System.out.println("Erro ao tentar encontrar aluno pela matrícula " + error.getMessage());
+        }
+
+        return null;
+    }
+
     public List<Aluno> getAlunos() {
         List<Aluno> alunos = new ArrayList<>();
 

@@ -264,7 +264,7 @@ public class App {
 
         Disciplina novaDisciplina = new Disciplina(nomeDisciplina, cargaHoraria);
 
-        System.out.println("Turma não encontrada, cadastre uma turma primeiro!");
+        System.out.println("Disciplina criada com sucesso!");
         disciplinaRepository.save(novaDisciplina);
 
     }
@@ -389,6 +389,7 @@ public class App {
             System.out.println("Digite o numero da turma que deseja matricular o aluno " + aluno.getNome() + ":");
             int turmaNum = sc.nextInt();
             Turma turma = turmaRepository.getTurmaByNum(turmaNum);
+
             System.out.println("disc: " + turma.getDisciplina().getNome());
 
             if (turma != null) {

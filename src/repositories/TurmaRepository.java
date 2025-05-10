@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import entidades.Aluno;
+import entidades.Disciplina;
 import entidades.HorarioDeAula;
 import entidades.Professor;
 import entidades.Turma;
@@ -18,6 +19,8 @@ import entidades.ENUM.Modalidade;
 public class TurmaRepository {
 
     private ProfessorRepository professorRepository = new ProfessorRepository();
+    private DisciplinaRepository disciplinaRepository = new DisciplinaRepository();
+    private AlunoRepository alunoRepository = new AlunoRepository();
 
     public void save(Turma turma) {
 
@@ -54,6 +57,7 @@ public class TurmaRepository {
                     System.out.println("deopis do if");
 
                     StringBuilder novaLinha = new StringBuilder();
+                    novaLinha.append(turma.getNumeroTurma()).append(",");
                     novaLinha.append(turma.getProfessor().getNome()).append(",");
                     novaLinha.append(turma.getSemestre()).append(",");
                     novaLinha.append(turma.getModoDeParticipacao()).append(",");
@@ -95,20 +99,9 @@ public class TurmaRepository {
             while (leitor.hasNextLine()) {
                 String linha = leitor.nextLine();
 
-                // Ignora linhas em branco
-                if (linha.trim().isEmpty())
-                    continue;
-
                 String[] colunas = linha.split(",");
 
-                // Verifica se a linha tem pelo menos 11 colunas (como no exemplo)
-                if (colunas.length < 11) {
-                    System.out.println("Linha inválida ou incompleta: " + linha);
-                    continue;
-                }
-
                 try {
-                    // Parse dos dados
                     Integer numTurma = Integer.parseInt(colunas[0]);
                     String nomeProfessor = colunas[1];
                     Integer semestre = Integer.parseInt(colunas[2]);
@@ -133,13 +126,36 @@ public class TurmaRepository {
                                     horarioDeAula, capacidade);
                             turma.setSala(sala);
 
+                            if (colunas.length >= 10) {
+                                String stringDisciplina = colunas[10];
+                                Disciplina disciplina = disciplinaRepository.getByNome(stringDisciplina);
+                                if (disciplina != null) {
+                                    turma.setDisciplina(disciplina);
+                                }
+                            }
+
+                            // começar a pegar alunos caso exista
+
+                            if (colunas.length > 11) {
+
+                                for (int i = 11; i < colunas.length; i++) {
+                                    String nomeAluno = colunas[i].trim();
+                                    if (!nomeAluno.isEmpty()) {
+                                        Aluno aluno = alunoRepository.getAlunoByNome(nomeAluno);
+                                        if (aluno != null) {
+                                            turma.setAluno(aluno);
+                                        }
+                                    }
+                                }
+
+                            }
+
                             return turma;
                         }
                     }
 
                 } catch (Exception e) {
-                    System.out.println("Erro ao processar linha: " + linha);
-                    e.printStackTrace(); // Mostra onde falhou
+                    System.out.println("Erro ao consultar turma por numero" + e.getMessage());
                 }
             }
 
