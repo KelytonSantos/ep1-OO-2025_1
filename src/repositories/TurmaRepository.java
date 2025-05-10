@@ -52,9 +52,7 @@ public class TurmaRepository {
                 String linha = sc.nextLine();
                 String[] colunas = linha.split(",");
 
-                System.out.println("antes do if");
                 if (colunas.length > 0 && turma.getNumeroTurma() == Integer.parseInt(colunas[0])) {
-                    System.out.println("deopis do if");
 
                     StringBuilder novaLinha = new StringBuilder();
                     novaLinha.append(turma.getNumeroTurma()).append(",");
@@ -169,7 +167,7 @@ public class TurmaRepository {
     public List<Turma> getTurmas() {
         List<Turma> turmas = new ArrayList<>();
 
-        try (Scanner leitor = new Scanner(new FileReader("csv_files/Turmas.csv"))) {
+        try (Scanner leitor = new Scanner(new FileReader("csv_files/Turma.csv"))) {
 
             while (leitor.hasNextLine()) {
                 Professor professor = new Professor();

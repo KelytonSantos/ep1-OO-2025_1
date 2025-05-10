@@ -109,7 +109,10 @@ public class Turma {
     }
 
     public void setAluno(Aluno aluno) {
-        this.alunos.add(aluno);
+        if (alunos.size() <= maxAlunos) {
+            this.alunos.add(aluno);
+            maxAlunos--;
+        }
     }
 
     public Set<Aluno> getAlunos() {

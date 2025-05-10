@@ -90,7 +90,7 @@ public class App {
                         criarTurma();
                         break;
                     case 4:
-
+                        processamentoTurma();
                         break;
                     default:
                         break;
@@ -390,14 +390,27 @@ public class App {
             int turmaNum = sc.nextInt();
             Turma turma = turmaRepository.getTurmaByNum(turmaNum);
 
-            System.out.println("disc: " + turma.getDisciplina().getNome());
-
             if (turma != null) {
-                System.out.println("if...");
                 turma.setAluno(aluno);
 
                 turmaRepository.update(turma);
             }
+        }
+    }
+
+    public static void processamentoTurma() {
+        System.out.println("Lista de turmas disponíveis");
+
+        for (Turma turma : turmaRepository.getTurmas()) {
+            System.out.println(
+                    "Número da turma: " + turma.getNumeroTurma() + "    Professor: " + turma.getProfessor().getNome()
+                            + "     Semestre: " + turma.getSemestre() + "   Modo de Participação: "
+                            + turma.getModoDeParticipacao() + "     Método de Avaliação: "
+                            + turma.getMetodoDeAvaliacao() + " Horário de Aula: "
+                            + turma.getHorarioDeAula().getDia() + " " + turma.getHorarioDeAula().getHora() + ":"
+                            + turma.getHorarioDeAula().getMinuto() + "   Vagas disponíveis: " + turma.getMaxAlunos());
+            System.out.println("\n");
+            System.out.println("\n");
         }
     }
 }

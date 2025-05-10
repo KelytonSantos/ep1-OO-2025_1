@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import entidades.Disciplina;
@@ -44,12 +46,23 @@ public class DisciplinaRepository {
 
                 if (colunas.length > 0 && disciplina.getNome().equals(colunas[0])) {
 
+                    List<Integer> turmas = new ArrayList<>();
+
+                    for (int i = 2; i < colunas.length; i++) {
+                        turmas.add(Integer.parseInt(colunas[i]));
+                    }
+
+                    for (Turma turma : disciplina.getTurmas()) {
+                        turmas.add(turma.getNumeroTurma());
+                    }
+
                     StringBuilder novaLinha = new StringBuilder();
                     novaLinha.append(disciplina.getNome()).append(",");
                     novaLinha.append(disciplina.getCargaHoraria());
 
-                    for (Turma turma : disciplina.getTurmas()) {
-                        novaLinha.append(",").append(turma.getNumeroTurma());
+                    for (Integer numTurma : turmas) {
+
+                        novaLinha.append(",").append(numTurma);
                     }
 
                     writer.write(novaLinha.toString());
