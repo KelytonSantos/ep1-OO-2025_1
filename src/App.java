@@ -102,9 +102,11 @@ public class App {
                 System.out.println("1 - Lançar Notas ou lançar presença");
                 System.out.println("2 - Ver boletim individual");
                 System.out.println("3 - Ver boletim com dados da turma");
+
+                escolha = sc.nextInt();
                 switch (escolha) {
                     case 1:
-
+                        lancarNotasOuFrequencia();
                         break;
                     case 2:
 
@@ -394,6 +396,8 @@ public class App {
                 turma.setAluno(aluno);
 
                 turmaRepository.update(turma);
+                aluno.setTurma(turma);
+                alunoRepository.update(aluno);
             }
         }
     }
@@ -403,16 +407,44 @@ public class App {
 
         for (Turma turma : turmaRepository.getTurmas()) {
             System.out.println(
-                    "Número da turma: " + turma.getNumeroTurma() + "    Professor: " + turma.getProfessor().getNome()
-                            + "     Semestre: " + turma.getSemestre() + "   Modo de Participação: "
-                            + turma.getModoDeParticipacao() + "     Método de Avaliação: "
-                            + turma.getMetodoDeAvaliacao() + " Horário de Aula: "
+                    "Número da turma: " + turma.getNumeroTurma() + "  Disciplina: " + turma.getDisciplina().getNome()
+                            + "  Semestre: " + turma.getSemestre() + "  Modo de Participação: "
+                            + turma.getModoDeParticipacao()
+                            + "  Horário de Aula: "
                             + turma.getHorarioDeAula().getDia() + " " + turma.getHorarioDeAula().getHora() + ":"
-                            + turma.getHorarioDeAula().getMinuto() + "   Vagas disponíveis: " + turma.getMaxAlunos());
-            System.out.println("\n");
-            System.out.println("\n");
+                            + turma.getHorarioDeAula().getMinuto() + "  Vagas: " + turma.getMaxAlunos());
+        }
+        System.out.println();
+    }
+
+    public static void lancarNotasOuFrequencia() {
+        System.out.println("Digite a matricula do aluno: ");
+        int matricula = sc.nextInt();
+
+        Aluno aluno = alunoEspecialRepository.getAlunoEspecialByMatricula(matricula);
+        aluno = (aluno != null) ? aluno : alunoRepository.getAlunoByMatricula(matricula);
+
+        if (aluno == null) {
+            System.out.println("Aluno não encontrado");
+        } else {
+
+            Turma turma = turmaRepository.getTurmaByAluno(aluno.getNome());
+
+            if (turma != null) {
+                System.out.println("Digite a nota do aluno: ");
+                double nota = sc.nextDouble();
+
+                System.out.println("Digite a frequencia do aluno: ");
+                double frequencia = sc.nextDouble();
+
+                aluno.setNota(nota);
+                aluno.setFrequencia(frequencia);
+
+                alunoRepository.update(aluno);
+            }
         }
     }
+
 }
 
 // se o nome for diferente da ruim(tratar)

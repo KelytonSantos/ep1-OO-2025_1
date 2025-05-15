@@ -1,11 +1,17 @@
 package entidades;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Aluno {
 
     private Integer matricula;
     private String nome;
     private String curso;
     private Boolean trancamentoDeCurso;
+    private Double nota;
+    private double frequencia;
+    private List<Turma> turmas = new ArrayList<>();
 
     public Aluno() {
     }
@@ -49,10 +55,40 @@ public class Aluno {
         this.trancamentoDeCurso = trancamentoDeCurso;
     }
 
+    public Double getNota() {
+        return nota;
+    }
+
+    public void setNota(Double nota) {
+        this.nota = nota;
+    }
+
+    public List<Turma> getTurma() {
+        return turmas;
+    }
+
+    public void setTurma(Turma turma) {
+        this.turmas.add(turma);
+    }
+
+    public double getFrequencia() {
+        return frequencia;
+    }
+
+    public void setFrequencia(double frequencia) {
+        this.frequencia = frequencia;
+    }
+
     @Override
     public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-        return getMatricula() + "," + getNome() + "," + getCurso() + "," + getTrancamentoDeCurso();
+        for (Turma turma : this.turmas) {
+            sb.append(turma.getNumeroTurma()).append(",");
+        }
+
+        return getMatricula() + "," + getNome() + "," + getCurso() + "," + getTrancamentoDeCurso() + ","
+                + getNota() + "," + getFrequencia() + "," + sb.toString();
     }
 
 }

@@ -67,7 +67,6 @@ public class TurmaRepository {
 
                     for (Aluno aluno : turma.getAlunos()) {
                         novaLinha.append(aluno.getNome()).append(",");
-                        System.out.println("aluno: " + aluno.getNome());
                     }
 
                     writer.write(novaLinha.toString());
@@ -199,6 +198,14 @@ public class TurmaRepository {
                             capacidade);
                     turma.setSala(sala);
 
+                    if (colunas.length >= 10) {
+                        String stringDisciplina = colunas[10];
+                        Disciplina disciplina = disciplinaRepository.getByNome(stringDisciplina);
+                        if (disciplina != null) {
+                            turma.setDisciplina(disciplina);
+                        }
+                    }
+
                     turmas.add(turma);
                 }
             }
@@ -209,5 +216,30 @@ public class TurmaRepository {
 
         return turmas;
 
+    }
+
+    public Turma getTurmaByAluno(String nomeAluno) {
+        Turma turma = new Turma();
+
+        try (Scanner leitor = new Scanner(new FileReader("csv_files/Turma.csv"))) {
+
+            while (leitor.hasNextLine()) {
+                String linha = leitor.nextLine();
+
+                String[] colunas = linha.split(",");
+
+                for (int i = 11; i < colunas.length; i++) {
+                    if (colunas[i].equalsIgnoreCase(nomeAluno)) {
+                        turma = getTurmaByNum(Integer.parseInt(colunas[0]));
+                        return turma;
+                    }
+                }
+
+            }
+
+        } catch (IOException error) {
+            System.out.println("Erro ao tentar ler o arquivo Turma.csv: " + error.getMessage());
+        }
+        return null;
     }
 }
