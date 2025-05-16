@@ -97,7 +97,7 @@ public class Aluno {
         }
 
         return getMatricula() + "," + getNome() + "," + getCurso() + "," + getTrancamentoDeCurso() + ","
-                + getNota() + "," + getFrequencia() + "," + sb.toString();
+                + sb.toString();
     }
 
 }

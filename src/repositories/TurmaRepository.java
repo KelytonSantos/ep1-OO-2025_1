@@ -242,4 +242,29 @@ public class TurmaRepository {
         }
         return null;
     }
+
+    public List<Turma> getTurmasByMatricula(Integer matricula) {
+        List<Turma> turmas = new ArrayList<>();
+
+        try (Scanner leitor = new Scanner(new FileReader("csv_files/Turma.csv"))) {
+
+            while (leitor.hasNextLine()) {
+                String linha = leitor.nextLine();
+
+                String[] colunas = linha.split(",");
+
+                for (int i = 11; i < colunas.length; i++) {
+                    Aluno aluno = alunoRepository.getAlunoByNome(colunas[i]);
+                    if (aluno != null && aluno.getMatricula().equals(matricula)) {
+                        turmas.add(getTurmaByNum(Integer.parseInt(colunas[0])));
+                    }
+                }
+
+            }
+
+        } catch (IOException error) {
+            System.out.println("Erro ao tentar ler o arquivo Turma.csv: " + error.getMessage());
+        }
+        return turmas;
+    }
 }

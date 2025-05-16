@@ -201,8 +201,9 @@ public class App {
 
                     alunoEspecialParaEditar.setNome(nome);
                     alunoEspecialParaEditar.setCurso(curso);
-                    alunoEspecialRepository.update(alunoEspecialParaEditar);
+
                 }
+                alunoEspecialRepository.update(alunoEspecialParaEditar);
             }
         } else {
 
@@ -315,7 +316,7 @@ public class App {
                 int modoDePartici = sc.nextInt();
 
                 System.out.println(
-                        "Defina o dia da semana, o horario e os minutos em que serão ministradas as aulas (ex: Quinta, 14, 00)");
+                        "Defina o dia da semana, o horario e os minutos em que serão ministradas as aulas (ex: Quinta 14 00)");
                 String diaDaSemana = sc.next();
                 int hora = sc.nextInt();
                 sc.nextLine();
@@ -327,7 +328,7 @@ public class App {
                 HorarioDeAula horarioDeAula = new HorarioDeAula(diaDaSemana, hora, minutos);
 
                 Turma novaTurma = new Turma(numTurma, novoProfessor, semestre, MetodoDeAvaliacao.fromCode(metodoDeAval),
-                        Modalidade.valueOf(modoDePartici), horarioDeAula, capacidadeMax);
+                        horarioDeAula, capacidadeMax);
 
                 novaTurma.setDisciplina(disciplina);
                 disciplina.addTurma(novaTurma);
@@ -337,6 +338,8 @@ public class App {
                     System.out.println("Digite a sala (ex: S9): ");
                     String sala = sc.nextLine();
                     novaTurma.setSala(sala);
+                } else {
+                    novaTurma.setModoDeParticipacao(Modalidade.valueOf(modoDePartici));
                 }
 
                 turmaRepository.save(novaTurma);
@@ -432,32 +435,55 @@ public class App {
         if (aluno == null) {
             System.out.println("Aluno não encontrado");
         } else {
+            TurmaAluno turmaAluno1 = turmaAlunoRepository.getTurmaAlunoByMatricula(matricula);
 
-            Turma turma = turmaRepository.getTurmaByAluno(aluno.getNome());
+            if (turmaAluno1 == null) {
+                System.out.println("Associação entre turma e aluno não encontrado");
+            } else {
 
-            if (turma != null) {
-                System.out.println("Avaliação Simples");
+                System.out.println("O aluno " + turmaAluno1.getAluno().getNome() + " está matriculado nas turmas: ");
 
-                System.out.println("Digite a primeira nota do aluno: ");
-                double nota1 = sc.nextDouble();
+                List<Turma> turmas = turmaRepository.getTurmasByMatricula(aluno.getMatricula());
 
-                System.out.println("Digite a segunda nota do aluno: ");
-                double nota2 = sc.nextDouble();
+                for (Turma t : turmas) {
+                    System.out.println("Turma: " + t.getNumeroTurma() + " Disciplina: " + t.getDisciplina().getNome());
+                }
+                System.out.println("Digite a turma que deseja lançar notas e presenças(ex: 05) ");
+                int turmaNum = sc.nextInt();
 
-                System.out.println("Digite a terceira nota do aluno: ");
-                double nota3 = sc.nextDouble();
+                Turma turma = turmaRepository.getTurmaByNum(turmaNum);
 
-                System.out.println("Digite a frequencia do aluno: ");
-                double frequencia = sc.nextDouble();
+                if (turma != null) {
 
-                aluno.setNota(nota1, nota2, nota3, turma.getMetodoDeAvaliacao());
-                aluno.setFrequencia(frequencia);
+                    System.out.println("Modo de avaliação: " + turma.getMetodoDeAvaliacao());
 
-                TurmaAluno turmaAluno = new TurmaAluno(aluno, turma, aluno.getNota(), frequencia);
-                turmaAlunoRepository.save(turmaAluno);
+                    System.out.println("Digite a primeira nota do aluno: ");
+                    double nota1 = sc.nextDouble();
+
+                    System.out.println("Digite a segunda nota do aluno: ");
+                    double nota2 = sc.nextDouble();
+
+                    System.out.println("Digite a terceira nota do aluno: ");
+                    double nota3 = sc.nextDouble();
+
+                    System.out.println("Digite a frequencia do aluno: ");
+                    double frequencia = sc.nextDouble();
+
+                    aluno.setNota(nota1, nota2, nota3, turma.getMetodoDeAvaliacao());
+                    aluno.setFrequencia(frequencia);
+
+                    TurmaAluno turmaAluno = new TurmaAluno(aluno, turma, aluno.getNota(), frequencia);
+                    turmaAlunoRepository.save(turmaAluno);
+                }
             }
         }
     }
+
+    /*
+     * o fluxo seria: encontra aluno(especial ou não) depois encontra em qual
+     * materia ele ta inscrito e listamos elas(por meio do turmaRepo) depois por
+     * meio de seleção escolhemos qual turma queremos salvar no turmaAluno
+     */
 
     public static void boletimIndividual() {
         System.out.println("Digite a matricula do aluno: ");

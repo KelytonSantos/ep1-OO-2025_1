@@ -28,7 +28,18 @@ public class Turma {
         this.semestre = semestre;
         this.metodoDeAvaliacao = metodoDeAvaliacao;
         this.modoDeParticipacao = modoDeParticipacao;
-        this.modoDeParticipacao = modoDeParticipacao;
+        this.metodoDeAvaliacao = metodoDeAvaliacao;
+        this.horarioDeAula = horarioDeAula;
+        this.maxAlunos = maxAlunos;
+    }
+
+    public Turma(Integer turma, Professor professor, Integer semestre,
+            MetodoDeAvaliacao metodoDeAvaliacao, HorarioDeAula horarioDeAula, Integer maxAlunos) {
+        this.numeroTurma = turma;
+        this.professor = professor;
+        this.semestre = semestre;
+        this.metodoDeAvaliacao = metodoDeAvaliacao;
+
         this.horarioDeAula = horarioDeAula;
         this.maxAlunos = maxAlunos;
     }

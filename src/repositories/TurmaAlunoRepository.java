@@ -27,17 +27,11 @@ public class TurmaAlunoRepository {
             FileWriter arquivo = new FileWriter("csv_files/TurmaAluno.csv", true);
             TurmaAluno novaTurmaAluno = getTurmaAlunoByMatricula(turmaAluno.getAluno().getMatricula());
 
-            if (novaTurmaAluno != null
-                    && turmaAluno.getTurma().getNumeroTurma().equals(novaTurmaAluno.getTurma().getNumeroTurma())) {
-                System.out.println("Associação turma aluno ja existe!");
-
-            } else {
-                novaTurmaAluno = new TurmaAluno(turmaAluno.getAluno(), turmaAluno.getTurma(), turmaAluno.getNota(),
-                        turmaAluno.getFrequencia());
-                arquivo.write(novaTurmaAluno.toString());
-                arquivo.write("\n");
-                arquivo.close();
-            }
+            novaTurmaAluno = new TurmaAluno(turmaAluno.getAluno(), turmaAluno.getTurma(), turmaAluno.getNota(),
+                    turmaAluno.getFrequencia());
+            arquivo.write(novaTurmaAluno.toString());
+            arquivo.write("\n");
+            arquivo.close();
 
         } catch (IOException error) {
             System.out.println("Erro ao salvar " + error.getMessage());

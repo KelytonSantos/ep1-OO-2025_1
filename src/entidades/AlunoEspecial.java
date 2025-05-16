@@ -22,6 +22,6 @@ public class AlunoEspecial extends Aluno {
     }
 
     public String toString() {
-        return super.toString() + "," + getAlunoEspecial();
+        return super.toString() + getAlunoEspecial();
     }
 }
