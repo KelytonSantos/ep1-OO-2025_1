@@ -47,7 +47,6 @@ public class ProfessorRepository {
                 }
 
             }
-
         } catch (IOException erro) {
             System.out.println("Erro ao consultar professor " + erro.getMessage());
         }

@@ -1,24 +1,24 @@
 package entidades;
 
 public class TurmaAluno {
-    private Integer alunoMatricula;
+    private Aluno aluno;
     private Turma turma;
     private Double nota;
-    private double frequencia;
+    private Double frequencia;
 
-    public TurmaAluno(Integer alunoMatricula, Turma turma, Double nota, double frequencia) {
-        this.alunoMatricula = alunoMatricula;
+    public TurmaAluno(Aluno aluno, Turma turma, Double nota, double frequencia) {
+        this.aluno = aluno;
         this.turma = turma;
         this.nota = nota;
         this.frequencia = frequencia;
     }
 
-    public Integer getAlunoMatricula() {
-        return alunoMatricula;
+    public Aluno getAluno() {
+        return aluno;
     }
 
-    public void setAluno(Integer alunoMatricula) {
-        this.alunoMatricula = alunoMatricula;
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
     }
 
     public Turma getTurma() {
@@ -47,7 +47,7 @@ public class TurmaAluno {
 
     @Override
     public String toString() {
-        return getAlunoMatricula() + "," +
+        return getAluno().getMatricula() + "," +
                 getTurma().getNumeroTurma() + "," +
                 getNota() + "," +
                 getFrequencia();

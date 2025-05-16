@@ -6,12 +6,14 @@ import entidades.Disciplina;
 import entidades.HorarioDeAula;
 import entidades.Professor;
 import entidades.Turma;
+import entidades.TurmaAluno;
 import entidades.ENUM.MetodoDeAvaliacao;
 import entidades.ENUM.Modalidade;
 import repositories.AlunoEspecialRepository;
 import repositories.AlunoRepository;
 import repositories.DisciplinaRepository;
 import repositories.ProfessorRepository;
+import repositories.TurmaAlunoRepository;
 import repositories.TurmaRepository;
 
 public class App {
@@ -21,6 +23,7 @@ public class App {
     public static ProfessorRepository professorRepository = new ProfessorRepository();
     public static DisciplinaRepository disciplinaRepository = new DisciplinaRepository();
     public static TurmaRepository turmaRepository = new TurmaRepository();
+    public static TurmaAlunoRepository turmaAlunoRepository = new TurmaAlunoRepository();
 
     public static void main(String[] args) throws Exception {
         System.out.println("Escolha um modo: ");
@@ -440,7 +443,8 @@ public class App {
                 aluno.setNota(nota);
                 aluno.setFrequencia(frequencia);
 
-                alunoRepository.update(aluno);
+                TurmaAluno turmaAluno = new TurmaAluno(aluno, turma, nota, frequencia);
+                turmaAlunoRepository.save(turmaAluno);
             }
         }
     }
