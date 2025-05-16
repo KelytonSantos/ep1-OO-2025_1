@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 import entidades.Aluno;
@@ -112,10 +113,11 @@ public class App {
                         lancarNotasOuFrequencia();
                         break;
                     case 2:
+                        boletimIndividual();
 
                         break;
                     case 3:
-
+                        boletimGeral();
                         break;
                     default:
                         break;
@@ -434,19 +436,82 @@ public class App {
             Turma turma = turmaRepository.getTurmaByAluno(aluno.getNome());
 
             if (turma != null) {
-                System.out.println("Digite a nota do aluno: ");
-                double nota = sc.nextDouble();
+                System.out.println("Avaliação Simples");
+
+                System.out.println("Digite a primeira nota do aluno: ");
+                double nota1 = sc.nextDouble();
+
+                System.out.println("Digite a segunda nota do aluno: ");
+                double nota2 = sc.nextDouble();
+
+                System.out.println("Digite a terceira nota do aluno: ");
+                double nota3 = sc.nextDouble();
 
                 System.out.println("Digite a frequencia do aluno: ");
                 double frequencia = sc.nextDouble();
 
-                aluno.setNota(nota);
+                aluno.setNota(nota1, nota2, nota3, turma.getMetodoDeAvaliacao());
                 aluno.setFrequencia(frequencia);
 
-                TurmaAluno turmaAluno = new TurmaAluno(aluno, turma, nota, frequencia);
+                TurmaAluno turmaAluno = new TurmaAluno(aluno, turma, aluno.getNota(), frequencia);
                 turmaAlunoRepository.save(turmaAluno);
             }
         }
+    }
+
+    public static void boletimIndividual() {
+        System.out.println("Digite a matricula do aluno: ");
+        int matricula = sc.nextInt();
+
+        TurmaAluno turmaAluno = turmaAlunoRepository.getTurmaAlunoByMatricula(matricula);
+
+        if (turmaAluno == null) {
+            System.out.println("Associação entre turma e aluno não encontrado");
+        } else {
+
+            System.out.println("O aluno " + turmaAluno.getAluno().getNome() + " está matriculado nas turmas: ");
+
+            for (TurmaAluno turma : turmaAlunoRepository.getTurmasAlunosByMatricula(matricula)) {
+                System.out.println("Turma: " + turma.getTurma().getNumeroTurma() + " Disciplina: "
+                        + turma.getTurma().getDisciplina().getNome());
+            }
+
+            System.out.println("Digite a turma que deseja ver o boletim (ex: 05) ");
+            int turmaNum = sc.nextInt();
+
+            TurmaAluno boletim = turmaAlunoRepository.getTurmaAlunoByMatricula(matricula, turmaNum);
+            if (boletim == null) {
+                System.out.println("Boletim não encontrado");
+            } else {
+                System.out.println("Boletim do aluno " + turmaAluno.getAluno().getNome() + ": ");
+                System.out.println("Nota: " + turmaAluno.getNota());
+                System.out.println("Frequencia: " + turmaAluno.getFrequencia());
+                // colocar situação?(aprovado ou reprovado)
+
+            }
+
+        }
+    }
+
+    public static void boletimGeral() {
+        System.out.println("Digite o nome da disciplina: ");
+        String nomeDisciplina = sc.nextLine();
+
+        Disciplina disciplina = disciplinaRepository.getByNome(nomeDisciplina);
+
+        if (disciplina == null) {
+            System.out.println("Disciplina não encontrada");
+        } else {
+            System.out.println("Boletim da disciplina " + disciplina.getNome() + ": ");
+            for (Turma turma : disciplina.getTurmas()) {
+                System.out.println("Turma: " + turma.getNumeroTurma());
+                for (Aluno aluno : turma.getAlunos()) {
+                    System.out.println("Aluno: " + aluno.getNome() + " Nota: " + aluno.getNota() + " Frequencia: "
+                            + aluno.getFrequencia());
+                }
+            }
+        }
+
     }
 
 }

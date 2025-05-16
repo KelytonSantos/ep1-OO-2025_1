@@ -94,6 +94,14 @@ public class DisciplinaRepository {
 
                 if (nome.equals(colunas[0])) {
                     Disciplina disciplina = new Disciplina(nome, Integer.parseInt(colunas[1]));
+
+                    if (colunas.length > 2) {
+                        for (int i = 2; i < colunas.length; i++) {
+                            Turma turma = new Turma();
+                            turma.setNumeroTurma(Integer.parseInt(colunas[i]));
+                            disciplina.addTurma(turma);
+                        }
+                    }
                     return disciplina;
                 }
 

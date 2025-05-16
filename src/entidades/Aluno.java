@@ -3,6 +3,8 @@ package entidades;
 import java.util.ArrayList;
 import java.util.List;
 
+import entidades.ENUM.MetodoDeAvaliacao;
+
 public class Aluno {
 
     private Integer matricula;
@@ -59,8 +61,15 @@ public class Aluno {
         return nota;
     }
 
-    public void setNota(Double nota) {
-        this.nota = nota;
+    public void setNota(Double nota1, Double nota2, Double nota3, MetodoDeAvaliacao metodoDeAvaliacao) {
+
+        if (metodoDeAvaliacao == MetodoDeAvaliacao.MEDIA_SIMPLES) {
+            this.nota = (nota1 + nota2 + nota3) / 3;
+        } else if (metodoDeAvaliacao == MetodoDeAvaliacao.MEDIA_PONDERADA) {
+            this.nota = ((nota1 * 2) + (nota2 * 3) + (nota3 * 5)) / 10;
+        } else {
+            throw new IllegalArgumentException("Método de avaliação inválido");
+        }
     }
 
     public List<Turma> getTurma() {
