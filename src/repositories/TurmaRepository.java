@@ -209,12 +209,16 @@ public class TurmaRepository {
                     turmas.add(turma);
                 }
             }
-
         } catch (IOException error) {
             System.out.println("Erro ao tentar buscar alunos" + error.getMessage());
         }
 
-        return turmas;
+        if (!turmas.isEmpty()) {
+            return turmas;
+
+        } else {
+            return null;
+        }
 
     }
 
@@ -229,7 +233,7 @@ public class TurmaRepository {
                 String[] colunas = linha.split(",");
 
                 for (int i = 11; i < colunas.length; i++) {
-                    if (colunas[i].equalsIgnoreCase(nomeAluno)) {
+                    if (colunas[i].equals(nomeAluno)) {
                         turma = getTurmaByNum(Integer.parseInt(colunas[0]));
                         return turma;
                     }

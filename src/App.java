@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -42,7 +43,7 @@ public class App {
                 case 0:
                     System.out.println("Encerrando o programa.");
                     sc.close();
-                    return; // ou use break seguido de um return fora do while
+                    return;
 
                 case 1:
                     System.out.println("O que deseja fazer?");
@@ -136,8 +137,8 @@ public class App {
             }
 
             System.out.println("\nPressione ENTER para continuar...");
-            sc.nextLine(); // Consumir o \n pendente
-            sc.nextLine(); // Esperar o usuário pressionar ENTER
+            sc.nextLine();
+            sc.nextLine();
         }
     }
 
@@ -402,32 +403,40 @@ public class App {
         if (aluno == null) {
             System.out.println("Aluno não encontrado");
         } else {
-            System.out.println("Turmas disponíveis para o aluno " + aluno.getNome() + ": ");
-            for (Turma t : turmaRepository.getTurmas()) {
-                if (t.getAlunos().size() < t.getMaxAlunos()) {
-                    System.out.println("Turma: " + t.getNumeroTurma() + " Disciplina: " + t.getDisciplina().getNome()
-                            + " Semestre: " + t.getSemestre() + " Modo de Participação: "
-                            + t.getModoDeParticipacao()
-                            + " Horário de Aula: "
-                            + t.getHorarioDeAula().getDia() + " " + t.getHorarioDeAula().getHora() + ":"
-                            + t.getHorarioDeAula().getMinuto() + " Vagas: " + t.getMaxAlunos());
+
+            if (turmaRepository.getTurmas() != null) {
+                System.out.println("Turmas disponíveis para o aluno " + aluno.getNome() + ": ");
+                for (Turma t : turmaRepository.getTurmas()) {
+                    if (t.getAlunos().size() < t.getMaxAlunos()) {
+                        System.out
+                                .println("Turma: " + t.getNumeroTurma() + " Disciplina: " + t.getDisciplina().getNome()
+                                        + " Semestre: " + t.getSemestre() + " Modo de Participação: "
+                                        + t.getModoDeParticipacao()
+                                        + " Horário de Aula: "
+                                        + t.getHorarioDeAula().getDia() + " " + t.getHorarioDeAula().getHora() + ":"
+                                        + t.getHorarioDeAula().getMinuto() + " Vagas: " + t.getMaxAlunos());
+                    }
                 }
+                System.out.println("Digite o numero da turma que deseja matricular o aluno " + aluno.getNome() + ":");
+                int turmaNum = sc.nextInt();
+                Turma turma = turmaRepository.getTurmaByNum(turmaNum);
+
+                if (turma != null && turmaRepository.getTurmaByAluno(aluno.getNome()) == null) {
+                    turma.setAluno(aluno);
+
+                    turmaRepository.update(turma);
+                    aluno.setTurma(turma);
+                    alunoRepository.update(aluno);
+
+                    TurmaAluno turmaAluno = new TurmaAluno(aluno, turma, 0.0, 0.0);
+                    turmaAlunoRepository.save(turmaAluno);
+                } else {
+                    System.out.println("Turma não encontrada ou aluno já matriculado na turma");
+                }
+            } else {
+                System.out.println("Não há turmas disponíveis");
             }
 
-            System.out.println("Digite o numero da turma que deseja matricular o aluno " + aluno.getNome() + ":");
-            int turmaNum = sc.nextInt();
-            Turma turma = turmaRepository.getTurmaByNum(turmaNum);
-
-            if (turma != null) {
-                turma.setAluno(aluno);
-
-                turmaRepository.update(turma);
-                aluno.setTurma(turma);
-                alunoRepository.update(aluno);
-
-                TurmaAluno turmaAluno = new TurmaAluno(aluno, turma, 0.0, 0.0);
-                turmaAlunoRepository.save(turmaAluno);
-            }
         }
     }
 
@@ -494,7 +503,7 @@ public class App {
                     aluno.setFrequencia(frequencia);
 
                     TurmaAluno turmaAluno = new TurmaAluno(aluno, turma, aluno.getNota(), frequencia);
-                    turmaAlunoRepository.save(turmaAluno);
+                    turmaAlunoRepository.update(turmaAluno);
                 }
             }
         }
@@ -534,6 +543,11 @@ public class App {
                 System.out.println("Nota: " + turmaAluno.getNota());
                 System.out.println("Frequencia: " + turmaAluno.getFrequencia());
                 // colocar situação?(aprovado ou reprovado)
+                if (boletim.getNota() >= 5.0 && boletim.getFrequencia() >= 75.0) {
+                    System.out.println("Aprovado");
+                } else {
+                    System.out.println("Reprovado");
+                }
 
             }
 
@@ -549,18 +563,27 @@ public class App {
         if (disciplina == null) {
             System.out.println("Disciplina não encontrada");
         } else {
-            System.out.println("Boletim da disciplina " + disciplina.getNome() + ": ");
-            for (Turma turma : disciplina.getTurmas()) {
-                System.out.println("Turma: " + turma.getNumeroTurma());
-                for (Aluno aluno : turma.getAlunos()) {
-                    System.out.println("Aluno: " + aluno.getNome() + " Nota: " + aluno.getNota() + " Frequencia: "
-                            + aluno.getFrequencia());
+            List<Turma> turmas = new ArrayList<>();
+
+            for (Turma t : disciplina.getTurmas()) {
+                Turma turmaCompleta = turmaRepository.getTurmaByNum(t.getNumeroTurma());
+                if (turmaCompleta != null) {
+                    turmas.add(turmaCompleta);
                 }
             }
+
+            for (Turma turma : disciplina.getTurmas()) {
+                System.out.println("Turma(s) da disciplina ");
+            }
         }
+
+        // construir turma de acordo com o numero presente na disciplina
+
+        /*
+         * a logica é pegar por disciplina, depois mostra as turmas daquela
+         * disciplina(mostrar so alguns campos), depois seleciona
+         * o numero da disciplina;
+         */
     }
 }
-
-// se o nome for diferente da ruim(tratar)
-
 // um aluno uma turma, editar apenas naquela associação

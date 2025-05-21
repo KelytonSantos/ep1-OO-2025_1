@@ -38,6 +38,34 @@ public class TurmaAlunoRepository {
         }
     }
 
+    public void update(TurmaAluno turmaAluno) {
+        try (Scanner sc = new Scanner(new FileReader("csv_files/TurmaAluno.csv"))) {
+            StringBuilder sb = new StringBuilder();
+            while (sc.hasNextLine()) {
+                String linha = sc.nextLine();
+                String[] colunas = linha.split(",");
+
+                if (turmaAluno.getAluno().getMatricula().equals(Integer.parseInt(colunas[0]))
+                        && turmaAluno.getTurma().getNumeroTurma().equals(Integer.parseInt(colunas[1]))) {
+
+                    TurmaAluno novaTurmaAluno = new TurmaAluno(turmaAluno.getAluno(), turmaAluno.getTurma(),
+                            turmaAluno.getNota(), turmaAluno.getFrequencia());
+                    sb.append(novaTurmaAluno.toString());
+                } else {
+                    sb.append(linha);
+                }
+                sb.append("\n");
+            }
+            FileWriter arquivo = new FileWriter("csv_files/TurmaAluno.csv");
+            arquivo.write(sb.toString());
+            arquivo.close();
+
+        } catch (IOException erro) {
+            System.out.println("Erro ao atualizar turma " + erro.getMessage());
+        }
+
+    }
+
     public TurmaAluno getTurmaAlunoByMatricula(Integer alunoMatricula) {
         try (Scanner sc = new Scanner(new FileReader("csv_files/TurmaAluno.csv"))) {
 
@@ -48,14 +76,10 @@ public class TurmaAlunoRepository {
                 Aluno aluno = alunoRepository.getAlunoByMatricula(Integer.parseInt(colunas[0]));
 
                 if (alunoMatricula.equals(Integer.parseInt(colunas[0]))) {
-                    Double nota = colunas[2].isEmpty() ? null : Double.parseDouble(colunas[2]);
-                    Double frequencia = colunas[3].isEmpty() ? null : Double.parseDouble(colunas[3]);
 
-                    TurmaAluno turmaAluno = new TurmaAluno(
-                            aluno,
+                    TurmaAluno turmaAluno = new TurmaAluno(aluno,
                             turmaRepository.getTurmaByNum(Integer.parseInt(colunas[1])),
-                            nota,
-                            frequencia);
+                            Double.parseDouble(colunas[2]), Double.parseDouble(colunas[3]));
 
                     return turmaAluno;
                 }
