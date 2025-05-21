@@ -27,109 +27,118 @@ public class App {
     public static TurmaAlunoRepository turmaAlunoRepository = new TurmaAlunoRepository();
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Escolha um modo: ");
-        System.out.println("1 - Modo Aluno (Normal e Especial)");
-        System.out.println("2 - Modo Disciplina/Turma");
-        System.out.println("3 - Modo Avaliação/Frequencia");
+        Scanner sc = new Scanner(System.in);
 
-        int escolha = sc.nextInt();
+        while (true) {
+            System.out.println("Escolha um modo: ");
+            System.out.println("0 - Sair");
+            System.out.println("1 - Modo Aluno (Normal e Especial)");
+            System.out.println("2 - Modo Disciplina/Turma");
+            System.out.println("3 - Modo Avaliação/Frequência");
 
-        switch (escolha) {
-            case 1:
-                System.out.println("O que deseja fazer?");
-                System.out.println("1 - Cadastrar Aluno ou editar aluno");
-                System.out.println("2 - Matricular Alunos em disciplinas");
-                System.out.println("3 - Ver alunos cadastrados");
+            int escolha = sc.nextInt();
 
-                escolha = sc.nextInt();
+            switch (escolha) {
+                case 0:
+                    System.out.println("Encerrando o programa.");
+                    sc.close();
+                    return; // ou use break seguido de um return fora do while
 
-                switch (escolha) {
-                    case 1:
-                        System.out.println(
-                                "Deseja matrícular aluno/aluno especial ou editar? (1 para matricular, 2 para editar)");
-                        escolha = sc.nextInt();
-                        if (escolha == 1)
-                            matricularAluno();
+                case 1:
+                    System.out.println("O que deseja fazer?");
+                    System.out.println("1 - Cadastrar Aluno ou editar aluno");
+                    System.out.println("2 - Matricular Alunos em disciplinas");
+                    System.out.println("3 - Ver alunos cadastrados");
 
-                        else if (escolha == 2) {
-                            editarAluno();
-                        } else {
-                            System.out.println("Numero invalido!");
-                        }
-                        break;
-                    case 2: // fazer depois de criar func de matricular turma
-                        matricularAlunoDisciplina();
+                    escolha = sc.nextInt();
 
-                        break;
-                    case 3:
+                    switch (escolha) {
+                        case 1:
+                            System.out.println(
+                                    "Deseja matrícular aluno/aluno especial ou editar? (1 para matricular, 2 para editar)");
+                            escolha = sc.nextInt();
+                            if (escolha == 1)
+                                matricularAluno();
+                            else if (escolha == 2)
+                                editarAluno();
+                            else
+                                System.out.println("Número inválido!");
+                            break;
+                        case 2:
+                            matricularAlunoDisciplina();
+                            break;
+                        case 3:
+                            System.out.println(
+                                    "Você deseja ver: 1 todos os alunos(normal/especial); 2 apenas alunos normais; 3 alunos especiais");
+                            escolha = sc.nextInt();
+                            listarAlunos(escolha);
+                            break;
+                        default:
+                            System.out.println("Código inválido");
+                            break;
+                    }
+                    break;
 
-                        System.out.println(
-                                "Você deseja ver: 1 todos os alunos(normal/especial); 2 apenas alunos normais; 3 alunos especiais");
-                        escolha = sc.nextInt();
-                        listarAlunos(escolha);
-                        break;
-                    default:
-                        System.out.println("Código Inválido");
-                        break;
-                }
-                break;
+                case 2:
+                    System.out.println("O que deseja fazer?");
+                    System.out.println("1 - Cadastrar novo Professor");
+                    System.out.println("2 - Cadastrar Disciplina");
+                    System.out.println("3 - Criar turmas");
+                    System.out.println("4 - Ver Turmas disponíveis");
 
-            case 2:
-                System.out.println("O que deseja fazer?");
-                System.out.println("1 - Cadastrar novo Professor");
-                System.out.println("2 - Cadastrar Disciplina");
-                System.out.println("3 - Criar turmas");
-                System.out.println("4 - Ver Turmas disponíveis");
+                    escolha = sc.nextInt();
 
-                escolha = sc.nextInt();
+                    switch (escolha) {
+                        case 1:
+                            criarProfessor();
+                            break;
+                        case 2:
+                            criarDisciplina();
+                            break;
+                        case 3:
+                            criarTurma();
+                            break;
+                        case 4:
+                            processamentoTurma();
+                            break;
+                        default:
+                            System.out.println("Código inválido");
+                            break;
+                    }
+                    break;
 
-                switch (escolha) {
-                    case 1:
-                        criarProfessor();
-                        break;
-                    case 2:
-                        criarDisciplina();
-                        break;
-                    case 3:
-                        criarTurma();
-                        break;
-                    case 4:
-                        processamentoTurma();
-                        break;
-                    default:
-                        break;
-                }
-                break;
+                case 3:
+                    System.out.println("O que deseja fazer?");
+                    System.out.println("1 - Lançar Notas ou lançar presença");
+                    System.out.println("2 - Ver boletim individual");
+                    System.out.println("3 - Ver boletim com dados da turma");
 
-            case 3:
-                System.out.println("O que deseja fazer?");
-                System.out.println("1 - Lançar Notas ou lançar presença");
-                System.out.println("2 - Ver boletim individual");
-                System.out.println("3 - Ver boletim com dados da turma");
+                    escolha = sc.nextInt();
+                    switch (escolha) {
+                        case 1:
+                            lancarNotasOuFrequencia();
+                            break;
+                        case 2:
+                            boletimIndividual();
+                            break;
+                        case 3:
+                            boletimGeral();
+                            break;
+                        default:
+                            System.out.println("Código inválido");
+                            break;
+                    }
+                    break;
 
-                escolha = sc.nextInt();
-                switch (escolha) {
-                    case 1:
-                        lancarNotasOuFrequencia();
-                        break;
-                    case 2:
-                        boletimIndividual();
+                default:
+                    System.out.println("Código inválido");
+                    break;
+            }
 
-                        break;
-                    case 3:
-                        boletimGeral();
-                        break;
-                    default:
-                        break;
-                }
-                break;
-
-            default:
-                System.out.println("Código inválido");
-                break;
+            System.out.println("\nPressione ENTER para continuar...");
+            sc.nextLine(); // Consumir o \n pendente
+            sc.nextLine(); // Esperar o usuário pressionar ENTER
         }
-
-        sc.close();
     }
 
     public static void matricularAluno() {
@@ -262,8 +271,6 @@ public class App {
 
     public static void criarDisciplina() {
 
-        sc.nextLine();
-
         System.out.println("Digite o nome da nova disciplina: ");
         String nomeDisciplina = sc.nextLine();
 
@@ -278,8 +285,6 @@ public class App {
     }
 
     public static void criarTurma() {
-
-        sc.nextLine();
 
         System.out.println("Digite o nome da disciplina existente que a nova turma estara associada: ");
         String nomeDisciplina = sc.nextLine();
@@ -319,7 +324,7 @@ public class App {
                         "Defina o dia da semana, o horario e os minutos em que serão ministradas as aulas (ex: Quinta 14 00)");
                 String diaDaSemana = sc.next();
                 int hora = sc.nextInt();
-                sc.nextLine();
+
                 int minutos = sc.nextInt();
 
                 System.out.println("Defina a capacidade maxima de alunos: ");
@@ -330,17 +335,18 @@ public class App {
                 Turma novaTurma = new Turma(numTurma, novoProfessor, semestre, MetodoDeAvaliacao.fromCode(metodoDeAval),
                         horarioDeAula, capacidadeMax);
 
-                novaTurma.setDisciplina(disciplina);
-                disciplina.addTurma(novaTurma);
-
                 sc.nextLine();
                 if (modoDePartici == 2) {
                     System.out.println("Digite a sala (ex: S9): ");
                     String sala = sc.nextLine();
                     novaTurma.setSala(sala);
+                    novaTurma.setModoDeParticipacao(Modalidade.valueOf(1));
                 } else {
                     novaTurma.setModoDeParticipacao(Modalidade.valueOf(modoDePartici));
                 }
+
+                novaTurma.setDisciplina(disciplina);
+                disciplina.addTurma(novaTurma);
 
                 turmaRepository.save(novaTurma);
                 disciplinaRepository.update(disciplina);
@@ -396,6 +402,18 @@ public class App {
         if (aluno == null) {
             System.out.println("Aluno não encontrado");
         } else {
+            System.out.println("Turmas disponíveis para o aluno " + aluno.getNome() + ": ");
+            for (Turma t : turmaRepository.getTurmas()) {
+                if (t.getAlunos().size() < t.getMaxAlunos()) {
+                    System.out.println("Turma: " + t.getNumeroTurma() + " Disciplina: " + t.getDisciplina().getNome()
+                            + " Semestre: " + t.getSemestre() + " Modo de Participação: "
+                            + t.getModoDeParticipacao()
+                            + " Horário de Aula: "
+                            + t.getHorarioDeAula().getDia() + " " + t.getHorarioDeAula().getHora() + ":"
+                            + t.getHorarioDeAula().getMinuto() + " Vagas: " + t.getMaxAlunos());
+                }
+            }
+
             System.out.println("Digite o numero da turma que deseja matricular o aluno " + aluno.getNome() + ":");
             int turmaNum = sc.nextInt();
             Turma turma = turmaRepository.getTurmaByNum(turmaNum);
@@ -406,6 +424,9 @@ public class App {
                 turmaRepository.update(turma);
                 aluno.setTurma(turma);
                 alunoRepository.update(aluno);
+
+                TurmaAluno turmaAluno = new TurmaAluno(aluno, turma, 0.0, 0.0);
+                turmaAlunoRepository.save(turmaAluno);
             }
         }
     }
@@ -537,9 +558,9 @@ public class App {
                 }
             }
         }
-
     }
-
 }
 
 // se o nome for diferente da ruim(tratar)
+
+// um aluno uma turma, editar apenas naquela associação
