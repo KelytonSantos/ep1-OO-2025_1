@@ -571,10 +571,47 @@ public class App {
                     turmas.add(turmaCompleta);
                 }
             }
-
-            for (Turma turma : disciplina.getTurmas()) {
-                System.out.println("Turma(s) da disciplina ");
+            System.out.println("Disciplina: " + disciplina.getNome());
+            for (Turma turma : turmas) {
+                System.out.println("Turma: " + turma.getNumeroTurma() + " Professor: " + turma.getProfessor().getNome()
+                        + " Modo de Participação: "
+                        + turma.getModoDeParticipacao()
+                        + " Horário de Aula: "
+                        + turma.getHorarioDeAula().getDia() + " " + turma.getHorarioDeAula().getHora() + ":"
+                        + turma.getHorarioDeAula().getMinuto());
             }
+            System.out.println("Digite o número da turma que deseja ver o boletim (ex: 05) ");
+            int turmaNum = sc.nextInt();
+
+            List<TurmaAluno> turmaAlunos = turmaAlunoRepository.getTurmasAlunosByNumeroTurma(turmaNum);
+            System.out.println(turmaAlunos.size());
+
+            double nota = 0.0;
+            double mediaTurma = 0.0;
+            int frequencia = 0;
+            int aprovados = 0;
+
+            for (TurmaAluno t : turmaAlunos) {
+                nota += t.getNota();
+
+                if (t.getFrequencia() >= 75.0) {
+                    frequencia++;
+                }
+
+                if (t.getNota() >= 5.0 && t.getFrequencia() >= 75.0) {
+                    aprovados++;
+                }
+            }
+
+            mediaTurma = nota / turmaAlunos.size();
+
+            System.out.println("Boletim da turma");
+            System.out.println("A turma tem " + turmaAlunos.size() + " alunos");
+            System.out.println("A média de notas da turma é: " + mediaTurma);
+            System.out.println("A quantidade de alunos com frequência acima de 75% é: " + frequencia);
+            System.out.println("A quantidade de alunos aprovados é: " + aprovados + " ou cerca de "
+                    + (aprovados * 100 / turmaAlunos.size()));
+            System.out.println("");
         }
 
         // construir turma de acordo com o numero presente na disciplina
@@ -587,3 +624,4 @@ public class App {
     }
 }
 // um aluno uma turma, editar apenas naquela associação
+// falta apenas fazer a logica do aluno especial;

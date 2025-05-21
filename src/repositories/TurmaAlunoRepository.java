@@ -151,4 +151,39 @@ public class TurmaAlunoRepository {
         return turmasAlunos;
     }
 
+    public List<TurmaAluno> getTurmasAlunosByNumeroTurma(Integer numeroTurma) {
+
+        List<TurmaAluno> turmasAlunos = new ArrayList<>();
+
+        try (Scanner sc = new Scanner(new FileReader("csv_files/TurmaAluno.csv"))) {
+
+            while (sc.hasNextLine()) {
+                String linha = sc.nextLine();
+                String[] colunas = linha.split(",");
+
+                Aluno aluno = alunoRepository.getAlunoByMatricula(Integer.parseInt(colunas[0]));
+
+                if (numeroTurma.equals(Integer.parseInt(colunas[1]))) {
+
+                    TurmaAluno turmaAluno = new TurmaAluno(aluno,
+                            turmaRepository.getTurmaByNum(Integer.parseInt(colunas[1])),
+                            Double.parseDouble(colunas[2]), Double.parseDouble(colunas[3]));
+
+                    turmasAlunos.add(turmaAluno);
+                }
+
+            }
+
+        } catch (IOException erro) {
+            System.out.println("Erro ao consultar turmaAluno " + erro.getMessage());
+        }
+
+        if (turmasAlunos.isEmpty()) {
+            return null;
+        } else {
+            return turmasAlunos;
+        }
+
+    }
+
 }
