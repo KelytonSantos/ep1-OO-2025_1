@@ -157,8 +157,14 @@ public class App {
             System.out.println("Digite o nome do curso: ");
             String curso = sc.nextLine();
 
-            AlunoEspecial alunoEspecial = new AlunoEspecial(nome, matricula, curso, false, true);
-            alunoEspecialRepository.save(alunoEspecial);
+            if (alunoEspecialRepository.getAlunoEspecialByMatricula(matricula) != null
+                    && alunoRepository.getAlunoByMatricula(matricula) != null) {
+
+                AlunoEspecial alunoEspecial = new AlunoEspecial(nome, matricula, curso, false, true);
+                alunoEspecialRepository.save(alunoEspecial);
+            } else {
+                System.out.println("Aluno ja existe!");
+            }
 
         } else {
 
@@ -171,9 +177,14 @@ public class App {
             System.out.println("Digite o nome do curso: ");
             String curso = sc.nextLine();
 
-            Aluno aluno = new Aluno(nome, matricula, curso, Boolean.valueOf(false));
+            if (alunoEspecialRepository.getAlunoEspecialByMatricula(matricula) != null
+                    && alunoRepository.getAlunoByMatricula(matricula) != null) {
+                Aluno aluno = new Aluno(nome, matricula, curso, Boolean.valueOf(false));
+                alunoRepository.save(aluno);
+            } else {
+                System.out.println("Aluno ja existe!");
+            }
 
-            alunoRepository.save(aluno);
         }
     }
 
@@ -398,6 +409,7 @@ public class App {
         int matricula = sc.nextInt();
 
         Aluno aluno = alunoEspecialRepository.getAlunoEspecialByMatricula(matricula);
+
         aluno = (aluno != null) ? aluno : alunoRepository.getAlunoByMatricula(matricula);
 
         if (aluno == null) {
@@ -416,23 +428,43 @@ public class App {
                                         + t.getHorarioDeAula().getDia() + " " + t.getHorarioDeAula().getHora() + ":"
                                         + t.getHorarioDeAula().getMinuto() + " Vagas: " + t.getMaxAlunos());
                     }
+                    System.out.print("\n");
                 }
                 System.out.println("Digite o numero da turma que deseja matricular o aluno " + aluno.getNome() + ":");
                 int turmaNum = sc.nextInt();
                 Turma turma = turmaRepository.getTurmaByNum(turmaNum);
 
-                if (turma != null && turmaRepository.getTurmaByAluno(aluno.getNome()) == null) {
-                    turma.setAluno(aluno);
+                if (turma != null && turmaRepository.getTurmaByAluno(aluno.getNome()) != null) {
 
-                    turmaRepository.update(turma);
-                    aluno.setTurma(turma);
-                    alunoRepository.update(aluno);
+                    if (aluno instanceof AlunoEspecial) {
+                        AlunoEspecial alunoEspecial = (AlunoEspecial) aluno;
 
-                    TurmaAluno turmaAluno = new TurmaAluno(aluno, turma, 0.0, 0.0);
-                    turmaAlunoRepository.save(turmaAluno);
+                        if (alunoEspecial.getNumeroDeMateriasMax() > 0) {
+                            alunoEspecial.setTurma(turma);
+                            turma.setAluno(alunoEspecial);
+
+                            turmaRepository.update(turma);
+                            alunoEspecialRepository.update(alunoEspecial);
+
+                            TurmaAluno turmaAluno = new TurmaAluno(alunoEspecial, turma, 0.0, 0.0);
+                            turmaAlunoRepository.save(turmaAluno);
+                        } else {
+                            System.out.println("Aluno especial atingiu o número máximo de matérias permitidas.");
+                        }
+                    } else {
+                        aluno.setTurma(turma);
+                        turma.setAluno(aluno);
+
+                        turmaRepository.update(turma);
+                        alunoRepository.update(aluno);
+
+                        TurmaAluno turmaAluno = new TurmaAluno(aluno, turma, 0.0, 0.0);
+                        turmaAlunoRepository.save(turmaAluno);
+                    }
                 } else {
                     System.out.println("Turma não encontrada ou aluno já matriculado na turma");
                 }
+
             } else {
                 System.out.println("Não há turmas disponíveis");
             }

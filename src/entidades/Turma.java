@@ -123,6 +123,8 @@ public class Turma {
         if (alunos.size() <= maxAlunos) {
             this.alunos.add(aluno);
             maxAlunos--;
+        } else {
+            System.out.println("Turma Cheia");
         }
     }
 

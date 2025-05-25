@@ -9,8 +9,11 @@ import java.util.List;
 import java.util.Scanner;
 
 import entidades.AlunoEspecial;
+import entidades.Turma;
 
 public class AlunoEspecialRepository {
+
+    public TurmaRepository turmaRepository = new TurmaRepository();
 
     public void save(AlunoEspecial alunoEspecial) {
 
@@ -89,6 +92,20 @@ public class AlunoEspecialRepository {
 
                     AlunoEspecial alunoEspecial = new AlunoEspecial(nome, matricula, curso, trancamento,
                             isAlunoEspecial);
+
+                    if (colunas.length > 6) {
+
+                        for (int i = 6; i < colunas.length; i++) {
+                            String turma = colunas[i].trim();
+                            if (!turma.isEmpty()) {
+                                Turma turma1 = turmaRepository.getTurmaByNum(Integer.parseInt(turma));
+                                if (turma1 != null) {
+                                    alunoEspecial.setTurma(turma1);
+                                }
+                            }
+                        }
+
+                    }
                     return alunoEspecial;
                 }
 
