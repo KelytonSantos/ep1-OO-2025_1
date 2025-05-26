@@ -30,7 +30,6 @@ public class App {
     public static void main(String[] args) throws Exception {
         alunoEspecialRepository.setTurmaRepository(turmaRepository);
         turmaRepository.setAlunoEspecialRepository(alunoEspecialRepository);
-        System.out.println("Log 1: " + turmaRepository);
 
         Scanner sc = new Scanner(System.in);
 
@@ -560,12 +559,6 @@ public class App {
         }
     }
 
-    /*
-     * o fluxo seria: encontra aluno(especial ou não) depois encontra em qual
-     * materia ele ta inscrito e listamos elas(por meio do turmaRepo) depois por
-     * meio de seleção escolhemos qual turma queremos salvar no turmaAluno
-     */
-
     public static void boletimIndividual() {
         System.out.println("Digite a matricula do aluno: ");
         int matricula = sc.nextInt();
@@ -674,5 +667,3 @@ public class App {
     }
 
 }
-// um aluno uma turma, editar apenas naquela associação
-// falta apenas fazer a logica do aluno especial;

@@ -135,8 +135,6 @@ public class TurmaRepository {
                                 }
                             }
 
-                            // começar a pegar alunos caso exista
-
                             if (colunas.length > 11) {
 
                                 for (int i = 11; i < colunas.length; i++) {
@@ -148,7 +146,6 @@ public class TurmaRepository {
                                         }
                                     }
                                 }
-
                             }
 
                             return turma;

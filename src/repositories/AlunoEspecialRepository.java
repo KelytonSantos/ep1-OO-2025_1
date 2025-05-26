@@ -16,7 +16,6 @@ public class AlunoEspecialRepository {
     private TurmaRepository turmaRepository;
 
     public void setTurmaRepository(TurmaRepository turmaRepository) {
-        System.out.println("Log: " + turmaRepository);
         this.turmaRepository = turmaRepository;
     }
 
