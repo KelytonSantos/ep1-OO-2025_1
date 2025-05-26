@@ -88,8 +88,8 @@ O enunciado do trabalho pode ser encontrado aqui:
 
 ## Prints da Execução
 
-1. Menu Principal:
-   ![alt text](resources/image-1.png)
+1. Lista de alunos cadastrados:
+   ![alt text](resources/image%20copy.png)
 
 2. Cadastro de Aluno:  
    ![alt text](resources/image.png)
