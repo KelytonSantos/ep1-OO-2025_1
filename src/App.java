@@ -166,6 +166,8 @@ public class App {
 
                 AlunoEspecial alunoEspecial = new AlunoEspecial(nome, matricula, curso, false, true);
                 alunoEspecialRepository.save(alunoEspecial);
+
+                System.out.println("Aluno Cadastrado!");
             } else {
                 System.out.println("Aluno ja existe!");
             }
@@ -185,6 +187,7 @@ public class App {
                     && alunoRepository.getAlunoByMatricula(matricula) == null) {
                 Aluno aluno = new Aluno(nome, matricula, curso, Boolean.valueOf(false));
                 alunoRepository.save(aluno);
+                System.out.println("Aluno Cadastrado!");
             } else {
                 System.out.println("Aluno ja existe!");
             }
@@ -229,6 +232,7 @@ public class App {
 
                 }
                 alunoEspecialRepository.update(alunoEspecialParaEditar);
+                System.out.println("Aluno Editado!");
             }
         } else {
 
@@ -262,6 +266,8 @@ public class App {
             }
 
             alunoRepository.update(alunoParaEditar);
+            System.out.println("Aluno Editado!");
+
         }
     }
 
@@ -282,6 +288,8 @@ public class App {
             Professor novoProfessor = new Professor(matricula, nomeProfessor);
 
             professorRepository.save(novoProfessor);
+            System.out.println("Professor cadastrado!");
+
         }
     }
 
@@ -366,6 +374,8 @@ public class App {
 
                 turmaRepository.save(novaTurma);
                 disciplinaRepository.update(disciplina);
+
+                System.out.println("Disciplina Criada!");
             }
         }
     }
@@ -453,6 +463,7 @@ public class App {
 
                             TurmaAluno turmaAluno = new TurmaAluno(alunoEspecial, turma, 0.0, 0.0);
                             turmaAlunoRepository.save(turmaAluno);
+                            System.out.println("Aluno matriculado com sucesso!");
                         } else {
                             System.out.println("Aluno especial atingiu o número máximo de matérias permitidas.");
                         }
@@ -465,6 +476,7 @@ public class App {
 
                         TurmaAluno turmaAluno = new TurmaAluno(aluno, turma, 0.0, 0.0);
                         turmaAlunoRepository.save(turmaAluno);
+                        System.out.println("Aluno matriculado com sucesso!");
                     }
                 } else {
                     System.out.println("Turma não encontrada ou aluno já matriculado na turma");
@@ -628,8 +640,6 @@ public class App {
                     + " " + turma.getHorarioDeAula().getHora() + ":"
                     + turma.getHorarioDeAula().getMinuto());
         }
-
-        System.out.println("max" + turmas.size());
 
         System.out.println("Digite o número da turma que deseja ver o boletim (ex: 05): ");
         int turmaNum = sc.nextInt();

@@ -5,6 +5,7 @@
 Desenvolvimento de um sistema acadêmico para gerenciar alunos, disciplinas, professores, turmas, avaliações e frequência, utilizando os conceitos de orientação a objetos (herança, polimorfismo e encapsulamento) e persistência de dados em arquivos.
 
 O enunciado do trabalho pode ser encontrado aqui:
+
 - [Trabalho 1 - Sistema Acadêmico](https://github.com/lboaventura25/OO-T06_2025.1_UnB_FCTE/blob/main/trabalhos/ep1/README.md)
 
 ## Dados do Aluno
@@ -18,17 +19,62 @@ O enunciado do trabalho pode ser encontrado aqui:
 
 ## Instruções para Compilação e Execução
 
-1. **Compilação:**  
-   [Descrever aqui como compilar o projeto. Exemplo: `javac Main.java` ou o script usado]
+1.  **Compilação:**
 
-2. **Execução:**  
-   [Descrever aqui como executar o projeto. Exemplo: `java Main` ou o script usado]
+    Clone todo este repositório com o comando `git clone`.
+    Em seguida abra o terminal na raiz desse repositório e rode o comando:
 
-3. **Estrutura de Pastas:**  
-   [Descrever aqui as principais pastas do projeto]
+    >
 
-3. **Versão do JAVA utilizada:**  
-   [Descrever aqui como versão do JAVA utilizada no projeto. Sugestão: `java 21`]
+          javac -d out @source.txt
+
+    >
+
+2.  **Execução:**
+
+    Para executar utilize o comando:
+
+    >
+
+           java -cp out App
+
+    >
+
+3.  **Estrutura de Pastas:**
+
+```bash
+   ├── src
+   ├── App.java
+   ├── entidades
+   │   ├── AlunoEspecial.java
+   │   ├── Aluno.java
+   │   ├── Disciplina.java
+   │   ├── ENUM
+   │   │   ├── MetodoDeAvaliacao.java
+   │   │   └── Modalidade.java
+   │   ├── HorarioDeAula.java
+   │   ├── Professor.java
+   │   ├── TurmaAluno.java
+   │   └── Turma.java
+   └── repositories
+       ├── AlunoEspecialRepository.java
+       ├── AlunoRepository.java
+       ├── DisciplinaRepository.java
+       ├── ProfessorRepository.java
+       ├── TurmaAlunoRepository.java
+       └── TurmaRepository.java
+ csv_files
+   ├── Aluno.csv
+   ├── AlunoEspecial.csv
+   ├── Disciplina.csv
+   ├── Professor.csv
+   ├── TurmaAluno.csv
+   └── Turma.csv
+
+```
+
+4.  **Versão do JAVA utilizada:**  
+    A versão do java utilizada foi `java 21`
 
 ---
 
