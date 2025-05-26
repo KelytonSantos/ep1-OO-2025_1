@@ -28,6 +28,10 @@ public class App {
     public static TurmaAlunoRepository turmaAlunoRepository = new TurmaAlunoRepository();
 
     public static void main(String[] args) throws Exception {
+        alunoEspecialRepository.setTurmaRepository(turmaRepository);
+        turmaRepository.setAlunoEspecialRepository(alunoEspecialRepository);
+        System.out.println("Log 1: " + turmaRepository);
+
         Scanner sc = new Scanner(System.in);
 
         while (true) {
@@ -157,8 +161,8 @@ public class App {
             System.out.println("Digite o nome do curso: ");
             String curso = sc.nextLine();
 
-            if (alunoEspecialRepository.getAlunoEspecialByMatricula(matricula) != null
-                    && alunoRepository.getAlunoByMatricula(matricula) != null) {
+            if (alunoEspecialRepository.getAlunoEspecialByMatricula(matricula) == null
+                    && alunoRepository.getAlunoByMatricula(matricula) == null) {
 
                 AlunoEspecial alunoEspecial = new AlunoEspecial(nome, matricula, curso, false, true);
                 alunoEspecialRepository.save(alunoEspecial);
@@ -177,8 +181,8 @@ public class App {
             System.out.println("Digite o nome do curso: ");
             String curso = sc.nextLine();
 
-            if (alunoEspecialRepository.getAlunoEspecialByMatricula(matricula) != null
-                    && alunoRepository.getAlunoByMatricula(matricula) != null) {
+            if (alunoEspecialRepository.getAlunoEspecialByMatricula(matricula) == null
+                    && alunoRepository.getAlunoByMatricula(matricula) == null) {
                 Aluno aluno = new Aluno(nome, matricula, curso, Boolean.valueOf(false));
                 alunoRepository.save(aluno);
             } else {
@@ -434,7 +438,8 @@ public class App {
                 int turmaNum = sc.nextInt();
                 Turma turma = turmaRepository.getTurmaByNum(turmaNum);
 
-                if (turma != null && turmaRepository.getTurmaByAluno(aluno.getNome()) != null) {
+                if (turma != null
+                        && turmaRepository.getTurmaByAluno(aluno.getNome(), turma.getNumeroTurma()) == null) {
 
                     if (aluno instanceof AlunoEspecial) {
                         AlunoEspecial alunoEspecial = (AlunoEspecial) aluno;
@@ -488,7 +493,7 @@ public class App {
     }
 
     public static void lancarNotasOuFrequencia() {
-        System.out.println("Digite a matricula do aluno: ");
+        System.out.println("Digite a matrícula do aluno: ");
         int matricula = sc.nextInt();
 
         Aluno aluno = alunoEspecialRepository.getAlunoEspecialByMatricula(matricula);
@@ -500,42 +505,56 @@ public class App {
             TurmaAluno turmaAluno1 = turmaAlunoRepository.getTurmaAlunoByMatricula(matricula);
 
             if (turmaAluno1 == null) {
-                System.out.println("Associação entre turma e aluno não encontrado");
+                System.out.println("Associação entre turma e aluno não encontrada");
             } else {
 
-                System.out.println("O aluno " + turmaAluno1.getAluno().getNome() + " está matriculado nas turmas: ");
+                System.out.println("O aluno " + aluno.getNome() + " está matriculado nas turmas: ");
 
                 List<Turma> turmas = turmaRepository.getTurmasByMatricula(aluno.getMatricula());
 
                 for (Turma t : turmas) {
                     System.out.println("Turma: " + t.getNumeroTurma() + " Disciplina: " + t.getDisciplina().getNome());
                 }
-                System.out.println("Digite a turma que deseja lançar notas e presenças(ex: 05) ");
+
+                System.out.println("Digite a turma que deseja lançar notas e presenças (ex: 05): ");
                 int turmaNum = sc.nextInt();
 
                 Turma turma = turmaRepository.getTurmaByNum(turmaNum);
 
                 if (turma != null) {
-
                     System.out.println("Modo de avaliação: " + turma.getMetodoDeAvaliacao());
 
-                    System.out.println("Digite a primeira nota do aluno: ");
-                    double nota1 = sc.nextDouble();
+                    double frequencia;
 
-                    System.out.println("Digite a segunda nota do aluno: ");
-                    double nota2 = sc.nextDouble();
+                    if (aluno instanceof AlunoEspecial) {
+                        System.out.println("Digite a frequência do aluno: ");
+                        frequencia = sc.nextDouble();
 
-                    System.out.println("Digite a terceira nota do aluno: ");
-                    double nota3 = sc.nextDouble();
+                        aluno.setFrequencia(frequencia);
 
-                    System.out.println("Digite a frequencia do aluno: ");
-                    double frequencia = sc.nextDouble();
+                        TurmaAluno turmaAluno = new TurmaAluno(aluno, turma, 0.0, frequencia);
+                        turmaAlunoRepository.update(turmaAluno);
 
-                    aluno.setNota(nota1, nota2, nota3, turma.getMetodoDeAvaliacao());
-                    aluno.setFrequencia(frequencia);
+                    } else {
+                        // Aluno regular: notas e frequência
+                        System.out.println("Digite a primeira nota do aluno: ");
+                        double nota1 = sc.nextDouble();
 
-                    TurmaAluno turmaAluno = new TurmaAluno(aluno, turma, aluno.getNota(), frequencia);
-                    turmaAlunoRepository.update(turmaAluno);
+                        System.out.println("Digite a segunda nota do aluno: ");
+                        double nota2 = sc.nextDouble();
+
+                        System.out.println("Digite a terceira nota do aluno: ");
+                        double nota3 = sc.nextDouble();
+
+                        System.out.println("Digite a frequência do aluno: ");
+                        frequencia = sc.nextDouble();
+
+                        aluno.setNota(nota1, nota2, nota3, turma.getMetodoDeAvaliacao());
+                        aluno.setFrequencia(frequencia);
+
+                        TurmaAluno turmaAluno = new TurmaAluno(aluno, turma, aluno.getNota(), frequencia);
+                        turmaAlunoRepository.update(turmaAluno);
+                    }
                 }
             }
         }
@@ -594,66 +613,66 @@ public class App {
 
         if (disciplina == null) {
             System.out.println("Disciplina não encontrada");
-        } else {
-            List<Turma> turmas = new ArrayList<>();
+            return;
+        }
 
-            for (Turma t : disciplina.getTurmas()) {
-                Turma turmaCompleta = turmaRepository.getTurmaByNum(t.getNumeroTurma());
-                if (turmaCompleta != null) {
-                    turmas.add(turmaCompleta);
-                }
+        List<Turma> turmas = new ArrayList<>();
+
+        for (Turma t : disciplina.getTurmas()) {
+            Turma turmaCompleta = turmaRepository.getTurmaByNum(t.getNumeroTurma());
+            if (turmaCompleta != null) {
+                turmas.add(turmaCompleta);
             }
-            System.out.println("Disciplina: " + disciplina.getNome());
-            for (Turma turma : turmas) {
-                System.out.println("Turma: " + turma.getNumeroTurma() + " Professor: " + turma.getProfessor().getNome()
-                        + " Modo de Participação: "
-                        + turma.getModoDeParticipacao()
-                        + " Horário de Aula: "
-                        + turma.getHorarioDeAula().getDia() + " " + turma.getHorarioDeAula().getHora() + ":"
-                        + turma.getHorarioDeAula().getMinuto());
+        }
+
+        System.out.println("Disciplina: " + disciplina.getNome());
+        for (Turma turma : turmas) {
+            System.out.println("Turma: " + turma.getNumeroTurma()
+                    + " Professor: " + turma.getProfessor().getNome()
+                    + " Modo de Participação: " + turma.getModoDeParticipacao()
+                    + " Horário de Aula: " + turma.getHorarioDeAula().getDia()
+                    + " " + turma.getHorarioDeAula().getHora() + ":"
+                    + turma.getHorarioDeAula().getMinuto());
+        }
+
+        System.out.println("Digite o número da turma que deseja ver o boletim (ex: 05): ");
+        int turmaNum = sc.nextInt();
+
+        List<TurmaAluno> turmaAlunos = turmaAlunoRepository.getTurmasAlunosByNumeroTurma(turmaNum);
+
+        double somaNotas = 0.0;
+        int countNotas = 0;
+        int frequencia = 0;
+        int aprovados = 0;
+
+        for (TurmaAluno t : turmaAlunos) {
+            Aluno aluno = t.getAluno();
+
+            // Conta frequência para todos
+            if (t.getFrequencia() >= 75.0) {
+                frequencia++;
             }
-            System.out.println("Digite o número da turma que deseja ver o boletim (ex: 05) ");
-            int turmaNum = sc.nextInt();
 
-            List<TurmaAluno> turmaAlunos = turmaAlunoRepository.getTurmasAlunosByNumeroTurma(turmaNum);
-            System.out.println(turmaAlunos.size());
-
-            double nota = 0.0;
-            double mediaTurma = 0.0;
-            int frequencia = 0;
-            int aprovados = 0;
-
-            for (TurmaAluno t : turmaAlunos) {
-                nota += t.getNota();
-
-                if (t.getFrequencia() >= 75.0) {
-                    frequencia++;
-                }
+            if (!(aluno instanceof AlunoEspecial)) {
+                somaNotas += t.getNota();
+                countNotas++;
 
                 if (t.getNota() >= 5.0 && t.getFrequencia() >= 75.0) {
                     aprovados++;
                 }
             }
-
-            mediaTurma = nota / turmaAlunos.size();
-
-            System.out.println("Boletim da turma");
-            System.out.println("A turma tem " + turmaAlunos.size() + " alunos");
-            System.out.println("A média de notas da turma é: " + mediaTurma);
-            System.out.println("A quantidade de alunos com frequência acima de 75% é: " + frequencia);
-            System.out.println("A quantidade de alunos aprovados é: " + aprovados + " ou cerca de "
-                    + (aprovados * 100 / turmaAlunos.size()));
-            System.out.println("");
         }
 
-        // construir turma de acordo com o numero presente na disciplina
+        double mediaTurma = (countNotas > 0) ? (somaNotas / countNotas) : 0.0;
 
-        /*
-         * a logica é pegar por disciplina, depois mostra as turmas daquela
-         * disciplina(mostrar so alguns campos), depois seleciona
-         * o numero da disciplina;
-         */
+        System.out.println("Boletim da turma:");
+        System.out.println("A turma tem " + turmaAlunos.size() + " alunos");
+        System.out.println("A média de notas da turma é: " + mediaTurma);
+        System.out.println("A quantidade de alunos com frequência acima de 75% é: " + frequencia);
+        System.out.println("A quantidade de alunos aprovados é: " + aprovados + " ou cerca de "
+                + (aprovados * 100 / Math.max(countNotas, 1)) + "% (excluindo alunos especiais da média e aprovação)");
     }
+
 }
 // um aluno uma turma, editar apenas naquela associação
 // falta apenas fazer a logica do aluno especial;

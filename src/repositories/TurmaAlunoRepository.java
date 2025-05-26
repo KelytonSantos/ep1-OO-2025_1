@@ -12,9 +12,9 @@ import entidades.Aluno;
 import entidades.TurmaAluno;
 
 public class TurmaAlunoRepository {
-
-    public TurmaRepository turmaRepository = new TurmaRepository();
-    public AlunoRepository alunoRepository = new AlunoRepository();
+    private AlunoRepository alunoRepository = new AlunoRepository();
+    private TurmaRepository turmaRepository = new TurmaRepository();
+    private AlunoEspecialRepository alunoEspecialRepository = new AlunoEspecialRepository();
 
     public void save(TurmaAluno turmaAluno) {
 
@@ -67,6 +67,7 @@ public class TurmaAlunoRepository {
     }
 
     public TurmaAluno getTurmaAlunoByMatricula(Integer alunoMatricula) {
+        alunoEspecialRepository.setTurmaRepository(turmaRepository);
         try (Scanner sc = new Scanner(new FileReader("csv_files/TurmaAluno.csv"))) {
 
             while (sc.hasNextLine()) {
@@ -74,6 +75,9 @@ public class TurmaAlunoRepository {
                 String[] colunas = linha.split(",");
 
                 Aluno aluno = alunoRepository.getAlunoByMatricula(Integer.parseInt(colunas[0]));
+                aluno = (aluno == null)
+                        ? alunoEspecialRepository.getAlunoEspecialByMatricula(Integer.parseInt(colunas[0]))
+                        : aluno;
 
                 if (alunoMatricula.equals(Integer.parseInt(colunas[0]))) {
 

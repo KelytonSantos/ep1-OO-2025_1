@@ -13,7 +13,12 @@ import entidades.Turma;
 
 public class AlunoEspecialRepository {
 
-    public TurmaRepository turmaRepository = new TurmaRepository();
+    private TurmaRepository turmaRepository;
+
+    public void setTurmaRepository(TurmaRepository turmaRepository) {
+        System.out.println("Log: " + turmaRepository);
+        this.turmaRepository = turmaRepository;
+    }
 
     public void save(AlunoEspecial alunoEspecial) {
 
@@ -106,6 +111,34 @@ public class AlunoEspecialRepository {
                         }
 
                     }
+                    return alunoEspecial;
+                }
+
+            }
+
+        } catch (IOException erro) {
+            System.out.println("Erro ao buscar " + erro.getMessage());
+        }
+
+        return null;
+    }
+
+    public AlunoEspecial getAlunoEspecialByNome(String nome) {
+
+        try (Scanner sc = new Scanner(new FileReader("csv_files/AlunoEspecial.csv"))) {
+
+            while (sc.hasNextLine()) {
+                String linha = sc.nextLine();
+                String[] colunas = linha.split(",");
+
+                if (nome.equals(colunas[1])) {
+                    Integer matricula = Integer.parseInt(colunas[0]);
+                    String curso = colunas[2];
+                    Boolean trancamento = Boolean.parseBoolean(colunas[3]);
+                    Boolean isAlunoEspecial = Boolean.parseBoolean(colunas[4]);
+
+                    AlunoEspecial alunoEspecial = new AlunoEspecial(nome, matricula, curso, trancamento,
+                            isAlunoEspecial);
                     return alunoEspecial;
                 }
 

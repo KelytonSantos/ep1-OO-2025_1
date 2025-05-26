@@ -21,6 +21,11 @@ public class TurmaRepository {
     private ProfessorRepository professorRepository = new ProfessorRepository();
     private DisciplinaRepository disciplinaRepository = new DisciplinaRepository();
     private AlunoRepository alunoRepository = new AlunoRepository();
+    private AlunoEspecialRepository alunoEspecialRepository;
+
+    public void setAlunoEspecialRepository(AlunoEspecialRepository alunoEspecialRepository) {
+        this.alunoEspecialRepository = alunoEspecialRepository;
+    }
 
     public void save(Turma turma) {
 
@@ -90,7 +95,6 @@ public class TurmaRepository {
     }
 
     public Turma getTurmaByNum(Integer num) {
-
         try (Scanner leitor = new Scanner(new FileReader("csv_files/Turma.csv"))) {
 
             while (leitor.hasNextLine()) {
@@ -222,7 +226,7 @@ public class TurmaRepository {
 
     }
 
-    public Turma getTurmaByAluno(String nomeAluno) {
+    public Turma getTurmaByAluno(String nomeAluno, Integer numTurma) {
         Turma turma = new Turma();
 
         try (Scanner leitor = new Scanner(new FileReader("csv_files/Turma.csv"))) {
@@ -232,13 +236,15 @@ public class TurmaRepository {
 
                 String[] colunas = linha.split(",");
 
-                for (int i = 11; i < colunas.length; i++) {
-                    if (colunas[i].equals(nomeAluno)) {
-                        turma = getTurmaByNum(Integer.parseInt(colunas[0]));
-                        return turma;
+                if (colunas[0].equals(String.valueOf(numTurma))) {
+
+                    for (int i = 11; i < colunas.length; i++) {
+                        if (colunas[i].equals(nomeAluno)) {
+                            turma = getTurmaByNum(Integer.parseInt(colunas[0]));
+                            return turma;
+                        }
                     }
                 }
-
             }
 
         } catch (IOException error) {
@@ -259,6 +265,8 @@ public class TurmaRepository {
 
                 for (int i = 11; i < colunas.length; i++) {
                     Aluno aluno = alunoRepository.getAlunoByNome(colunas[i]);
+                    aluno = (aluno != null) ? aluno : alunoEspecialRepository.getAlunoEspecialByNome(colunas[i]);
+
                     if (aluno != null && aluno.getMatricula().equals(matricula)) {
                         turmas.add(getTurmaByNum(Integer.parseInt(colunas[0])));
                     }
