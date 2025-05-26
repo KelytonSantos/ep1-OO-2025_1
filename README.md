@@ -10,10 +10,10 @@ O enunciado do trabalho pode ser encontrado aqui:
 
 ## Dados do Aluno
 
-- **Nome completo:** [Preencher aqui]
-- **Matrícula:** [Preencher aqui]
-- **Curso:** [Preencher aqui]
-- **Turma:** [Preencher aqui]
+- **Nome completo:** Kelyton de Lucas Moraes Santos
+- **Matrícula:** 241012033
+- **Curso:** Engenharias
+- **Turma:** 06
 
 ---
 
@@ -86,28 +86,31 @@ O enunciado do trabalho pode ser encontrado aqui:
 
 ## Prints da Execução
 
-1. Menu Principal:  
-   ![Inserir Print 1](caminho/do/print1.png)
+1. Menu Principal:
+   ![alt text](resources/image-1.png)
 
 2. Cadastro de Aluno:  
-   ![Inserir Print 2](caminho/do/print2.png)
+   ![alt text](resources/image.png)
 
-3. Relatório de Frequência/Notas:  
-   ![Inserir Print 3](caminho/do/print3.png)
+3. Relatório de Frequência/Notas da turma:  
+   ![alt text](resources/3.png)
+
+4. Relatório de Frequência/Notas individual:
+   ![alt text](/resources/4.png)
 
 ---
 
 ## Principais Funcionalidades Implementadas
 
-- [ ] Cadastro, listagem, matrícula e trancamento de alunos (Normais e Especiais)
-- [ ] Cadastro de disciplinas e criação de turmas (presenciais e remotas)
-- [ ] Matrícula de alunos em turmas, respeitando vagas e pré-requisitos
-- [ ] Lançamento de notas e controle de presença
-- [ ] Cálculo de média final e verificação de aprovação/reprovação
-- [ ] Relatórios de desempenho acadêmico por aluno, turma e disciplina
-- [ ] Persistência de dados em arquivos (.txt ou .csv)
-- [ ] Tratamento de duplicidade de matrículas
-- [ ] Uso de herança, polimorfismo e encapsulamento
+- [x] Cadastro, listagem, matrícula e trancamento de alunos (Normais e Especiais)
+- [x] Cadastro de disciplinas e criação de turmas (presenciais e remotas)
+- [x] Matrícula de alunos em turmas, respeitando vagas e pré-requisitos
+- [x] Lançamento de notas e controle de presença
+- [x] Cálculo de média final e verificação de aprovação/reprovação
+- [x] Relatórios de desempenho acadêmico por aluno, turma e disciplina
+- [x] Persistência de dados em arquivos (.txt ou .csv)
+- [x] Tratamento de duplicidade de matrículas
+- [x] Uso de herança, polimorfismo e encapsulamento
 
 ---
 
@@ -119,4 +122,4 @@ O enunciado do trabalho pode ser encontrado aqui:
 
 ## Contato
 
-- [Opcional: E-mail pessoal do aluno.]
+- kelytonlucas@gmail.com

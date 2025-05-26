@@ -115,6 +115,7 @@ public class App {
                 case 3:
                     System.out.println("1 - Lançar Notas ou lançar presença");
                     lancarNotasOuFrequencia();
+                    break;
 
                 case 4:
                     System.out.println("O que deseja fazer?");
@@ -150,14 +151,19 @@ public class App {
         System.out.println("O aluno que deseja matricular é especial (s ou n)?");
         char escolha = sc.next().charAt(0);
 
+        System.out.println();
+
         if (escolha == 's' || escolha == 'S') {
             System.out.println("Digite a matrícula do novo aluno especial: ");
             int matricula = sc.nextInt();
+
+            System.out.println();
 
             sc.nextLine();
             System.out.println("Digite o nome do aluno: ");
             String nome = sc.nextLine();
 
+            System.out.println();
             System.out.println("Digite o nome do curso: ");
             String curso = sc.nextLine();
 
@@ -177,9 +183,12 @@ public class App {
             System.out.println("Digite a matrícula do aluno: ");
             int matricula = sc.nextInt();
             sc.nextLine();
+
+            System.out.println();
             System.out.println("Digite o nome do Aluno: ");
             String nome = sc.nextLine();
 
+            System.out.println();
             System.out.println("Digite o nome do curso: ");
             String curso = sc.nextLine();
 
