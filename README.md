@@ -40,6 +40,8 @@ O enunciado do trabalho pode ser encontrado aqui:
 
     >
 
+    Também funciona pelo botão de execução do VScode.
+
 3.  **Estrutura de Pastas:**
 
 ```bash
