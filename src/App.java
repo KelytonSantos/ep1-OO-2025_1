@@ -39,6 +39,7 @@ public class App {
             System.out.println("1 - Modo Aluno (Normal e Especial)");
             System.out.println("2 - Modo Disciplina/Turma");
             System.out.println("3 - Modo Avaliação/Frequência");
+            System.out.println("4 - Boletins");
 
             int escolha = sc.nextInt();
 
@@ -112,30 +113,29 @@ public class App {
                     break;
 
                 case 3:
-                    System.out.println("O que deseja fazer?");
                     System.out.println("1 - Lançar Notas ou lançar presença");
-                    System.out.println("2 - Ver boletim individual");
-                    System.out.println("3 - Ver boletim com dados da turma");
+                    lancarNotasOuFrequencia();
 
+                case 4:
+                    System.out.println("O que deseja fazer?");
+                    System.out.println("1 - Ver boletim individual");
+                    System.out.println("2 - Ver boletim com dados da turma");
                     escolha = sc.nextInt();
+
                     switch (escolha) {
                         case 1:
-                            lancarNotasOuFrequencia();
-                            break;
-                        case 2:
                             boletimIndividual();
                             break;
-                        case 3:
+                        case 2:
                             boletimGeral();
-                            break;
                         default:
-                            System.out.println("Código inválido");
                             break;
                     }
                     break;
 
                 default:
                     System.out.println("Código inválido");
+
                     break;
             }
 
@@ -143,6 +143,7 @@ public class App {
             sc.nextLine();
             sc.nextLine();
         }
+
     }
 
     public static void matricularAluno() {
@@ -628,6 +629,8 @@ public class App {
                     + turma.getHorarioDeAula().getMinuto());
         }
 
+        System.out.println("max" + turmas.size());
+
         System.out.println("Digite o número da turma que deseja ver o boletim (ex: 05): ");
         int turmaNum = sc.nextInt();
 
@@ -665,5 +668,7 @@ public class App {
         System.out.println("A quantidade de alunos aprovados é: " + aprovados + " ou cerca de "
                 + (aprovados * 100 / Math.max(countNotas, 1)) + "% (excluindo alunos especiais da média e aprovação)");
     }
-
 }
+
+// (pre requisito), trancar disciplina, (n poder criar turma no mesmo h e dia),
+// boletim por professor
