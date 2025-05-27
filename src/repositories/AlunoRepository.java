@@ -75,21 +75,24 @@ public class AlunoRepository {
             while (sc.hasNextLine()) {
                 String linha = sc.nextLine();
 
+                if (linha.trim().isEmpty())
+                    continue;
+
                 String[] colunas = linha.split(",");
 
-                if (matricula.equals(Integer.parseInt(colunas[0]))) {
-                    String nome = colunas[1];
-                    String curso = colunas[2];
-                    Boolean trancamento = Boolean.parseBoolean(colunas[3]);
+                if (colunas.length > 0 && !colunas[0].trim().isEmpty()) {
+                    if (matricula.equals(Integer.parseInt(colunas[0].trim()))) {
+                        String nome = colunas[1];
+                        String curso = colunas[2];
+                        Boolean trancamento = Boolean.parseBoolean(colunas[3]);
 
-                    Aluno aluno = new Aluno(nome, matricula, curso, trancamento);
-
-                    return aluno;
+                        return new Aluno(nome, matricula, curso, trancamento);
+                    }
                 }
-
             }
+
         } catch (IOException error) {
-            System.out.println("Erro ao tentar encontrar aluno pela matrícula " + error.getMessage());
+            System.out.println("Erro ao tentar encontrar aluno pela matrícula: " + error.getMessage());
         }
 
         return null;

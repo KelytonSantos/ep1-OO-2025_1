@@ -88,31 +88,30 @@ public class AlunoEspecialRepository {
                 String linha = sc.nextLine();
                 String[] colunas = linha.split(",");
 
-                if (matricula.equals(Integer.parseInt(colunas[0]))) {
-                    String nome = colunas[1];
-                    String curso = colunas[2];
-                    Boolean trancamento = Boolean.parseBoolean(colunas[3]);
-                    Boolean isAlunoEspecial = Boolean.parseBoolean(colunas[4]);
+                if (colunas.length > 0 && !colunas[0].trim().isEmpty()) {
+                    if (matricula.equals(Integer.parseInt(colunas[0].trim()))) {
+                        String nome = colunas[1];
+                        String curso = colunas[2];
+                        Boolean trancamento = Boolean.parseBoolean(colunas[3]);
+                        Boolean isAlunoEspecial = Boolean.parseBoolean(colunas[4]);
 
-                    AlunoEspecial alunoEspecial = new AlunoEspecial(nome, matricula, curso, trancamento,
-                            isAlunoEspecial);
+                        AlunoEspecial alunoEspecial = new AlunoEspecial(nome, matricula, curso, trancamento,
+                                isAlunoEspecial);
 
-                    if (colunas.length > 6) {
-
-                        for (int i = 6; i < colunas.length; i++) {
-                            String turma = colunas[i].trim();
-                            if (!turma.isEmpty()) {
-                                Turma turma1 = turmaRepository.getTurmaByNum(Integer.parseInt(turma));
-                                if (turma1 != null) {
-                                    alunoEspecial.setTurma(turma1);
+                        if (colunas.length > 6) {
+                            for (int i = 6; i < colunas.length; i++) {
+                                String turma = colunas[i].trim();
+                                if (!turma.isEmpty()) {
+                                    Turma turma1 = turmaRepository.getTurmaByNum(Integer.parseInt(turma));
+                                    if (turma1 != null) {
+                                        alunoEspecial.setTurma(turma1);
+                                    }
                                 }
                             }
                         }
-
+                        return alunoEspecial;
                     }
-                    return alunoEspecial;
                 }
-
             }
 
         } catch (IOException erro) {
